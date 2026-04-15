@@ -1,4 +1,4 @@
-name: Deploy 3D Star Gallery to GitHub Pages
+name: Deploy Photo-Wall to GitHub Pages
 
 on:
   push:
@@ -30,7 +30,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./photo-wall-3d
+          path: ./photo-wall
 
       - name: Deploy to GitHub Pages
         id: deployment
