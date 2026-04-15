@@ -52,7 +52,27 @@ class PhotoWall {
     loadImagesFromStorage() {
         const stored = localStorage.getItem('baiLuPhotos');
         if (stored) {
-            this.images = JSON.parse(stored);
+            try {
+                this.images = JSON.parse(stored);
+
+                // 检查是否有旧格式的URL（ai-beauty-gallery或github.com/raw格式）
+                const hasOldUrls = this.images.some(img =>
+                    img.url.includes('ai-beauty-gallery') ||
+                    img.url.includes('github.com/raw')
+                );
+
+                if (hasOldUrls) {
+                    console.warn('⚠️ 检测到旧格式的图片URL，自动清除并重新加载...');
+                    localStorage.removeItem('baiLuPhotos');
+                    this.images = [];
+                } else {
+                    console.log('✅ 从localStorage加载了', this.images.length, '张图片');
+                }
+            } catch (error) {
+                console.error('❌ 解析localStorage图片数据失败:', error);
+                localStorage.removeItem('baiLuPhotos');
+                this.images = [];
+            }
         }
     }
 
