@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>照片墙测试 - Beauty Gallery Hub</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            margin: 10px 5px;
+            cursor: pointer;
+        }
+        .button-green {
+            background: #28a745;
+        }
+        .button-green:hover {
+            background: #218838;
+        }
+        .result {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 15px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        .success {
+            color: #28a745;
+            font-weight: bold;
+        }
+        .error {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        .info {
+            color: #17a2b8;
+            font-weight: bold;
+        }
+        .images-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .image-item {
+            position: relative;
+            aspect-ratio: 1;
+            background: #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .image-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .image-item .category {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 5px;
+            font-size: 12px;
+            text-align: center;
+        }
+        .loading {
+            color: #17a2b8;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 照片墙功能测试</h1>
+
+    <div class="test-section">
+        <h2>📊 当前状态</h2>
+        <div id="current-status">
+            <span class="loading">⏳ 正在检查状态...</span>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>🔄 功能测试</h2>
+        <button class="button" onclick="checkLocalStorage()">📦 检查LocalStorage</button>
+        <button class="button button-green" onclick="loadAllImages()">🚀 加载所有照片（测试）</button>
+        <button class="button" onclick="clearStorage()">🗑️ 清除缓存</button>
+        <div id="test-result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>🖼️ 加载的照片</h2>
+        <div id="images-grid" class="images-grid"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>🚀 访问照片墙</h2>
+        <a href="index.html" class="button">📸 打开照片墙</a>
+        <a href="verify.html" class="button">🔍 功能验证页面</a>
+        <a href="test-images.html" class="button">🧪 测试图片链接</a>
+    </div>
+
+    <script>
+        let loadedImages = [];
+
+        function checkLocalStorage() {
+            const statusDiv = document.getElementById('current-status');
+            const resultDiv = document.getElementById('test-result');
+            
+            try {
+                const photos = localStorage.getItem('baiLuPhotos');
+                
+                if (photos) {
+                    const images = JSON.parse(photos);
+                    statusDiv.innerHTML = `
+                        <div class="result">
+                            <span class="success">✅ LocalStorage中有照片数据</span>
+                            📸 照片数量: <strong>${images.length}</strong>张
+                            ${images.length === 8 ? '<br><span class="error">⚠️ 检测到旧版本（8张照片）</span>' : ''}
+                            ${images.length > 8 ? '<br><span class="success">✅ 已更新为新版本（' + images.length + '张照片）</span>' : ''}
+                        </div>
+                    `;
+                    
+                    // 显示照片
+                    displayImages(images);
+                    
+                    resultDiv.innerHTML = `
+                        <div class="result">
+                            照片分类统计:<br>
+                            ${getCategoryStats(images)}
+                        </div>
+                    `;
+                } else {
+                    statusDiv.innerHTML = `
+                        <div class="result">
+                            <span class="info">ℹ️ LocalStorage中没有照片数据</span>
+                            <br>点击"加载所有照片"来测试功能
+                        </div>
+                    `;
+                }
+
+            } catch (error) {
+                statusDiv.innerHTML = `
+                    <div class="result">
+                        <span class="error">❌ 检查LocalStorage失败</span>
+                        错误: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        async function loadAllImages() {
+            const resultDiv = document.getElementById('test-result');
+            const statusDiv = document.getElementById('current-status');
+            
+            resultDiv.innerHTML = `
+                <div class="result">
+                    <span class="loading">🔄 正在从GitHub加载所有照片...</span>
+                    <br>这可能需要几分钟时间，请耐心等待
+                </div>
+            `;
+            
+            try {
+                // 获取所有分类
+                const categoriesResponse = await fetch('https://api.github.com/repos/qianjin1111/beauty-gallery-hub/contents/images/celebrities/bai-lu');
+                const categories = await categoriesResponse.json();
+                
+                if (!Array.isArray(categories)) {
+                    throw new Error('GitHub API返回数据格式错误');
+                }
+
+                console.log('📁 找到分类:', categories.map(c => c.name).join(', '));
+                
+                // 加载每个分类的图片
+                let totalImages = 0;
+                const allImages = [];
+                
+                for (const category of categories) {
+                    try {
+                        const categoryResponse = await fetch(`https://api.github.com/repos/qianjin1111/beauty-gallery-hub/contents/images/celebrities/bai-lu/${category.name}`);
+                        const categoryData = await categoryResponse.json();
+
+                        if (Array.isArray(categoryData)) {
+                            const imageFiles = categoryData.filter(file => file.type === 'file' && (file.name.endsWith('.jpg') || file.name.endsWith('.png')));
+
+                            imageFiles.forEach(file => {
+                                allImages.push({
+                                    url: file.download_url,
+                                    category: category.name,
+                                    source: 'beauty-gallery-hub'
+                                });
+                            });
+
+                            totalImages += imageFiles.length;
+                            console.log(`✅ ${category.name}: ${imageFiles.length}张`);
+                        }
+                    } catch (error) {
+                        console.error(`❌ 加载${category.name}分类失败:`, error);
+                    }
+                }
+
+                console.log(`📊 总共发现${totalImages}张照片`);
+
+                // 随机排序并限制数量
+                allImages.sort(() => Math.random() - 0.5);
+                const maxImages = 100;
+                const selectedImages = allImages.slice(0, maxImages);
+
+                console.log(`🎯 将显示${selectedImages.length}张照片`);
+
+                // 保存到localStorage
+                localStorage.setItem('baiLuPhotos', JSON.stringify(selectedImages));
+                loadedImages = selectedImages;
+
+                // 显示结果
+                resultDiv.innerHTML = `
+                    <div class="result">
+                        <span class="success">✅ 照片加载成功！</span>
+                        
+                        📊 加载统计:
+                        - 发现图片总数: ${totalImages}张
+                        - 显示照片数量: ${selectedImages.length}张
+                        - 分类数量: ${categories.length}个
+                        
+                        💾 已保存到LocalStorage
+                        
+                        <button class="button button-green" onclick="location.href='index.html'">📸 打开照片墙</button>
+                    </div>
+                `;
+                
+                // 显示照片
+                displayImages(selectedImages);
+                
+                // 更新状态
+                statusDiv.innerHTML = `
+                    <div class="result">
+                        <span class="success">✅ 已加载${selectedImages.length}张照片</span>
+                    </div>
+                `;
+
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result">
+                        <span class="error">❌ 加载照片失败</span>
+                        错误: ${error.message}
+                        <br>请检查：
+                        1. 网络连接
+                        2. GitHub API访问限制
+                        3. 控制台查看详细错误
+                    </div>
+                `;
+                console.error('加载照片失败:', error);
+            }
+        }
+
+        function displayImages(images) {
+            const grid = document.getElementById('images-grid');
+            grid.innerHTML = '';
+            
+            // 限制显示数量，避免页面过于庞大
+            const displayLimit = 50;
+            const imagesToDisplay = images.slice(0, displayLimit);
+            
+            imagesToDisplay.forEach((img, index) => {
+                const item = document.createElement('div');
+                item.className = 'image-item';
+                
+                const image = new Image();
+                image.src = img.url;
+                image.alt = `照片${index + 1}`;
+                
+                const category = document.createElement('div');
+                category.className = 'category';
+                category.textContent = img.category;
+                
+                item.appendChild(image);
+                item.appendChild(category);
+                grid.appendChild(item);
+            });
+            
+            if (images.length > displayLimit) {
+                const more = document.createElement('div');
+                more.style.gridColumn = '1 / -1';
+                more.style.textAlign = 'center';
+                more.style.padding = '10px';
+                more.textContent = `...还有 ${images.length - displayLimit} 张照片未显示`;
+                grid.appendChild(more);
+            }
+        }
+
+        function getCategoryStats(images) {
+            const categories = {};
+            images.forEach(img => {
+                categories[img.category] = (categories[img.category] || 0) + 1;
+            });
+            
+            return Object.entries(categories)
+                .map(([cat, count]) => `• ${cat}: ${count}张`)
+                .join('\n');
+        }
+
+        function clearStorage() {
+            if (confirm('确定要清除所有缓存数据吗？')) {
+                localStorage.removeItem('baiLuPhotos');
+                localStorage.removeItem('baiLuSettings');
+                alert('✅ 缓存已清除！');
+                checkLocalStorage();
+            }
+        }
+
+        // 页面加载时自动检查状态
+        window.onload = function() {
+            checkLocalStorage();
+        };
+    </script>
+</body>
+</html>
