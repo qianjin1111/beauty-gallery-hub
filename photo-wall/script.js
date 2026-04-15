@@ -69,44 +69,44 @@ class PhotoWall {
         try {
             const defaultImages = [
                 {
-                    url: 'https://raw.githubusercontent.com/qianjin1111/beauty-gallery-hub/main/images/celebrities/bai-lu/photoshoot/bb1b4ec8-33f4-4da5-8f44-487fba5bcbdb.jpg',
+                    url: 'images/celebrities/bai-lu/photoshoot/02674f47-63f0-4d61-b286-6fb837335b20.jpg',
                     category: '写真/大片',
-                    source: 'beauty-gallery-hub'
+                    source: 'local'
                 },
                 {
-                    url: 'https://raw.githubusercontent.com/qianjin1111/beauty-gallery-hub/main/images/celebrities/bai-lu/photoshoot/6a721898-21f8-4644-b7de-11b08f14a68e.jpg',
+                    url: 'images/celebrities/bai-lu/photoshoot/0bdda75c-75f6-493a-84be-8db14e33e01d.jpg',
                     category: '写真/大片',
-                    source: 'beauty-gallery-hub'
+                    source: 'local'
                 },
                 {
-                    url: 'https://raw.githubusercontent.com/qianjin1111/beauty-gallery-hub/main/images/celebrities/bai-lu/photoshoot/6ac2ef07-7cc8-4587-ab31-aa8b23a812bb.jpg',
+                    url: 'images/celebrities/bai-lu/photoshoot/1a64ebc3-339b-4844-b92b-e194c9f6ac01.jpg',
                     category: '写真/大片',
-                    source: 'beauty-gallery-hub'
+                    source: 'local'
                 },
                 {
-                    url: 'https://raw.githubusercontent.com/qianjin1111/beauty-gallery-hub/main/images/celebrities/bai-lu/photoshoot/43fad7ba-ce32-4eda-ad9f-a8d48b06734e.jpg',
+                    url: 'images/celebrities/bai-lu/photoshoot/1a8d0370-226f-4383-96ce-9e302651b309.jpg',
                     category: '写真/大片',
-                    source: 'beauty-gallery-hub'
+                    source: 'local'
                 },
                 {
-                    url: 'https://raw.githubusercontent.com/qianjin1111/beauty-gallery-hub/main/images/celebrities/bai-lu/daily/be5fe7de-721b-4fb8-bafd-330d48591bcb.jpg',
+                    url: 'images/celebrities/bai-lu/daily/0f1782cf-c7f2-4783-b4de-cfc32b45b152.jpg',
                     category: '日常/机场',
-                    source: 'beauty-gallery-hub'
+                    source: 'local'
                 },
                 {
-                    url: 'https://raw.githubusercontent.com/qianjin1111/beauty-gallery-hub/main/images/celebrities/bai-lu/daily/51b9992b-281b-4fb9-ba7d-abbaf10b9663.jpg',
+                    url: 'images/celebrities/bai-lu/daily/110454c8-da55-4b07-bf12-bcda410e3b11.jpg',
                     category: '日常/机场',
-                    source: 'beauty-gallery-hub'
+                    source: 'local'
                 },
                 {
-                    url: 'https://raw.githubusercontent.com/qianjin1111/beauty-gallery-hub/main/images/celebrities/bai-lu/events/07c6c2b4-f962-4b9b-a6da-ad981162adf6.jpg',
+                    url: 'images/celebrities/bai-lu/events/022d6b94-9b38-4877-8c50-d9a70dfc9f6f.jpg',
                     category: '活动/公开场合',
-                    source: 'beauty-gallery-hub'
+                    source: 'local'
                 },
                 {
-                    url: 'https://raw.githubusercontent.com/qianjin1111/beauty-gallery-hub/main/images/celebrities/bai-lu/events/d889f8af-f51e-458e-8679-3d1145b39759.jpg',
+                    url: 'images/celebrities/bai-lu/events/07c6c2b4-f962-4b9b-a6da-ad981162adf6.jpg',
                     category: '活动/公开场合',
-                    source: 'beauty-gallery-hub'
+                    source: 'local'
                 }
             ];
 
@@ -363,29 +363,29 @@ class PhotoWall {
             // 从beauty-gallery-hub仓库获取更多白鹿照片
             const newImages = [
                 {
-                    url: 'https://raw.githubusercontent.com/qianjin1111/beauty-gallery-hub/main/images/celebrities/bai-lu/photoshoot/feb9456c-c1b2-43ff-95fd-f28e9d5ccfb1.jpg',
+                    url: 'images/celebrities/bai-lu/photoshoot/feb9456c-c1b2-43ff-95fd-f28e9d5ccfb1.jpg',
                     category: '写真/大片',
-                    source: 'beauty-gallery-hub'
+                    source: 'local'
                 },
                 {
-                    url: 'https://raw.githubusercontent.com/qianjin1111/beauty-gallery-hub/main/images/celebrities/bai-lu/photoshoot/1a8d0370-226f-4383-96ce-9e302651b309.jpg',
+                    url: 'images/celebrities/bai-lu/photoshoot/1a8d0370-226f-4383-96ce-9e302651b309.jpg',
                     category: '写真/大片',
-                    source: 'beauty-gallery-hub'
+                    source: 'local'
                 },
                 {
-                    url: 'https://raw.githubusercontent.com/qianjin1111/beauty-gallery-hub/main/images/celebrities/bai-lu/photoshoot/38f5c696-28ff-4f9b-8102-9eaacb569a08.jpg',
+                    url: 'images/celebrities/bai-lu/photoshoot/38f5c696-28ff-4f9b-8102-9eaacb569a08.jpg',
                     category: '写真/大片',
-                    source: 'beauty-gallery-hub'
+                    source: 'local'
                 },
                 {
-                    url: 'https://raw.githubusercontent.com/qianjin1111/beauty-gallery-hub/main/images/celebrities/bai-lu/photoshoot/cb94868e-8448-4139-b842-54a6de164b62.jpg',
+                    url: 'images/celebrities/bai-lu/photoshoot/cb94868e-8448-4139-b842-54a6de164b62.jpg',
                     category: '写真/大片',
-                    source: 'beauty-gallery-hub'
+                    source: 'local'
                 },
                 {
-                    url: 'https://raw.githubusercontent.com/qianjin1111/beauty-gallery-hub/main/images/celebrities/bai-lu/daily/8d0c1dda-e15e-4287-9bea-a717237e94a9.jpg',
+                    url: 'images/celebrities/bai-lu/daily/8d0c1dda-e15e-4287-9bea-a717237e94a9.jpg',
                     category: '日常/机场',
-                    source: 'beauty-gallery-hub'
+                    source: 'local'
                 }
             ];
 
