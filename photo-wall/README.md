@@ -19,11 +19,11 @@
 
 ✅ **GitHub Pages已部署完成！**
 
-🌐 **主页面**：https://qianjin1111.github.io/beauty-gallery-hub/photo-wall/
+🌐 **主页面**：https://qianjin1111.github.io/beauty-gallery-hub/
 
-📋 **预览页面**：https://qianjin1111.github.io/beauty-gallery-hub/photo-wall/preview.html
+📋 **预览页面**：https://qianjin1111.github.io/beauty-gallery-hub/preview.html
 
-> 📌 注意：照片墙是 beauty-gallery-hub 项目的一部分
+> 📌 注意：照片墙是 beauty-gallery-hub 项目的主页功能
 
 ### 本地运行
 
@@ -38,7 +38,7 @@ cd beauty-gallery-hub/photo-wall
 open index.html
 
 # 方法2：使用本地服务器
-python -m http.server 8000
+python -m http.server 8000 --directory photo-wall
 # 然后访问 http://localhost:8000
 ```
 
@@ -186,8 +186,8 @@ beauty-gallery-hub/photo-wall/
 
 ### 部署链接
 
-- **主页面**：https://qianjin1111.github.io/beauty-gallery-hub/photo-wall/
-- **预览页面**：https://qianjin1111.github.io/beauty-gallery-hub/photo-wall/preview.html
+- **主页面**：https://qianjin1111.github.io/beauty-gallery-hub/
+- **预览页面**：https://qianjin1111.github.io/beauty-gallery-hub/preview.html
 
 ## 🌟 功能特性详解
 

@@ -74,8 +74,8 @@ beauty-gallery-hub/
 ## 🌐 访问地址
 
 ### 白鹿照片墙
-- **主页**：https://qianjin1111.github.io/beauty-gallery-hub/photo-wall/
-- **预览**：https://qianjin1111.github.io/beauty-gallery-hub/photo-wall/preview.html
+- **主页**：https://qianjin1111.github.io/beauty-gallery-hub/
+- **预览**：https://qianjin1111.github.io/beauty-gallery-hub/preview.html
 
 ### 图片仓库
 - **GitHub仓库**：https://github.com/qianjin1111/beauty-gallery-hub
