@@ -17,13 +17,21 @@ class PhotoWall {
     }
 
     async init() {
+        console.log('🚀 照片墙初始化开始');
+
         // 从本地存储加载图片
         this.loadImagesFromStorage();
         this.loadSettingsFromStorage();
 
+        console.log('📦 从localStorage加载的图片数量:', this.images.length);
+
         // 如果没有图片，从默认源加载
         if (this.images.length === 0) {
+            console.log('⚠️ localStorage中没有图片，正在加载默认图片...');
             await this.loadDefaultImages();
+            console.log('✅ 默认图片加载完成，当前图片数量:', this.images.length);
+        } else {
+            console.log('✅ 从localStorage加载了', this.images.length, '张图片');
         }
 
         // 初始化UI
@@ -36,6 +44,8 @@ class PhotoWall {
         if (this.settings.autoFetch) {
             this.setFetchTimer();
         }
+
+        console.log('🎉 照片墙初始化完成');
     }
 
     // 从本地存储加载图片
@@ -67,6 +77,7 @@ class PhotoWall {
     // 加载默认图片
     async loadDefaultImages() {
         try {
+            console.log('📥 开始加载默认白鹿照片...');
             const defaultImages = [
                 {
                     url: 'https://raw.githubusercontent.com/qianjin1111/beauty-gallery-hub/master/images/celebrities/bai-lu/daily/0f1782cf-c7f2-4783-b4de-cfc32b45b152.jpg',
@@ -112,10 +123,11 @@ class PhotoWall {
 
             this.images = defaultImages;
             this.saveImagesToStorage();
+            console.log('✅ 已加载', defaultImages.length, '张白鹿照片到localStorage');
             this.showToast('已加载白鹿照片', 'success');
         } catch (error) {
+            console.error('❌ 加载默认图片失败:', error);
             this.showToast('加载默认图片失败', 'error');
-            console.error('加载默认图片失败:', error);
         }
     }
 
@@ -132,6 +144,15 @@ class PhotoWall {
         document.getElementById('selectAllBtn').addEventListener('click', () => this.selectAll());
         document.getElementById('clearAllBtn').addEventListener('click', () => this.clearAll());
         document.getElementById('saveSettings').addEventListener('click', () => this.saveSettings());
+
+        // 添加清除存储的按钮事件
+        const clearStorageBtn = document.getElementById('clearStorage');
+        if (clearStorageBtn) {
+            clearStorageBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.clearStorage();
+            });
+        }
 
         // 加载设置到UI
         document.getElementById('interval').value = this.interval / 1000;
@@ -154,6 +175,10 @@ class PhotoWall {
         if (this.images.length > 0) {
             const currentImage = this.images[this.currentIndex];
 
+            // 先设置数据属性（在设置src之前）
+            currentPhoto.dataset.index = this.currentIndex;
+            currentPhoto.dataset.total = this.images.length;
+
             // 添加加载中状态
             currentPhoto.style.opacity = '0.5';
             photoIndex.textContent = `加载中...`;
@@ -171,13 +196,10 @@ class PhotoWall {
             // 添加加载错误处理
             currentPhoto.onerror = function() {
                 this.onerror = null;
+                console.error('图片加载失败:', this.src);
                 this.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="800" height="600"%3E%3Crect fill="%23f0f0f0" width="800" height="600"/%3E%3Ctext fill="%23dc3545" font-family="Arial" font-size="24" x="50%25" y="50%25" text-anchor="middle"%3E图片加载失败%3C/text%3E%3Ctext fill="%23666" font-family="Arial" font-size="16" x="50%25" y="60%25" text-anchor="middle"%3E请刷新页面重试%3C/text%3E%3C/svg%3E';
                 this.style.opacity = '1';
             };
-
-            // 设置数据属性
-            currentPhoto.dataset.index = this.currentIndex;
-            currentPhoto.dataset.total = this.images.length;
         } else {
             currentPhoto.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="800" height="600"%3E%3Crect fill="%23f0f0f0" width="800" height="600"/%3E%3Ctext fill="%23666" font-family="Arial" font-size="24" x="50%25" y="50%25" text-anchor="middle"%3E暂无图片%3C/text%3E%3C/svg%3E';
             currentPhoto.style.opacity = '1';
@@ -522,6 +544,17 @@ class PhotoWall {
             this.updateImageList();
             this.updateStats();
             this.showToast('已清空所有图片', 'success');
+        }
+    }
+
+    // 清除localStorage并重新加载
+    clearStorage() {
+        if (confirm('确定要清除所有缓存数据并重新加载吗？\n\n这将删除：\n- 所有图片缓存\n- 所有设置缓存\n\n清除后页面将自动重新加载。')) {
+            localStorage.removeItem('baiLuPhotos');
+            localStorage.removeItem('baiLuSettings');
+            console.log('🗑️ 已清除localStorage缓存');
+            alert('缓存已清除！页面将重新加载...');
+            location.reload();
         }
     }
 
