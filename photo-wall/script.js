@@ -32,6 +32,9 @@ class PhotoWall {
             console.log('✅ 默认图片加载完成，当前图片数量:', this.images.length);
         } else {
             console.log('✅ 从localStorage加载了', this.images.length, '张图片');
+            // 即使有缓存图片，也尝试加载更多照片
+            console.log('🔄 正在尝试加载更多照片...');
+            await this.loadAllImagesFromGitHub();
         }
 
         // 初始化UI
@@ -45,7 +48,7 @@ class PhotoWall {
             this.setFetchTimer();
         }
 
-        console.log('🎉 照片墙初始化完成');
+        console.log('🎉 照片墙初始化完成，当前图片数量:', this.images.length);
     }
 
     // 从本地存储加载图片
