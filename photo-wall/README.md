@@ -19,11 +19,11 @@
 
 ✅ **GitHub Pages已部署完成！**
 
-🌐 **主页面**：https://qianjin1111.github.io/bai-lu-photo-wall/
+🌐 **主页面**：https://qianjin1111.github.io/beauty-gallery-hub/photo-wall/
 
-📋 **预览页面**：https://qianjin1111.github.io/bai-lu-photo-wall/preview.html
+📋 **预览页面**：https://qianjin1111.github.io/beauty-gallery-hub/photo-wall/preview.html
 
-> 📌 注意：仓库已改为公开以支持GitHub Pages功能
+> 📌 注意：照片墙是 beauty-gallery-hub 项目的一部分
 
 ### 本地运行
 
@@ -31,8 +31,8 @@
 
 ```bash
 # 克隆项目
-git clone https://github.com/qianjin1111/bai-lu-photo-wall.git
-cd bai-lu-photo-wall
+git clone https://github.com/qianjin1111/beauty-gallery-hub.git
+cd beauty-gallery-hub/photo-wall
 
 # 方法1：直接打开
 open index.html
@@ -164,18 +164,16 @@ https://github.com/qianjin1111/ai-beauty-gallery/tree/main/images/celebrities/ba
 ## 📦 项目结构
 
 ```
-bai-lu-photo-wall/
-├── .github/
-│   └── workflows/
-│       └── deploy.yml       # GitHub Pages部署workflow
+beauty-gallery-hub/photo-wall/
 ├── index.html               # 主页面
 ├── style.css                # 样式文件（500+行）
 ├── script.js                # 功能脚本（600+行）
 ├── config.json              # 配置文件
 ├── preview.html             # 预览页面
 ├── README.md                # 说明文档
-├── PREVIEW_GUIDE.md         # 预览说明
-└── .gitignore               # Git忽略配置
+├── IMAGE_LOADING_FIX.md     # 图片加载问题修复报告
+├── IMAGE_LIST_FIX.md        # 图片列表问题修复报告
+└── FINAL_CONFIG_REPORT.md   # 最终配置报告
 ```
 
 ## 🌐 部署信息
@@ -188,8 +186,8 @@ bai-lu-photo-wall/
 
 ### 部署链接
 
-- **主页面**：https://qianjin1111.github.io/bai-lu-photo-wall/
-- **预览页面**：https://qianjin1111.github.io/bai-lu-photo-wall/preview.html
+- **主页面**：https://qianjin1111.github.io/beauty-gallery-hub/photo-wall/
+- **预览页面**：https://qianjin1111.github.io/beauty-gallery-hub/photo-wall/preview.html
 
 ## 🌟 功能特性详解
 
@@ -266,8 +264,8 @@ bai-lu-photo-wall/
 
 ## 📮 联系方式
 
-- **项目地址**：https://github.com/qianjin1111/bai-lu-photo-wall
-- **问题反馈**：https://github.com/qianjin1111/bai-lu-photo-wall/issues
+- **项目地址**：https://github.com/qianjin1111/beauty-gallery-hub
+- **问题反馈**：https://github.com/qianjin1111/beauty-gallery-hub/issues
 
 ---
 
