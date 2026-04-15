@@ -1,0 +1,99 @@
+{
+  "name": "白鹿照片墙",
+  "version": "1.0.0",
+  "description": "白鹿照片墙 - 支持轮播、自动拉取、图片管理",
+  "author": "OpenClaw AI助手",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/qianjin1111/bai-lu-photo-wall"
+  },
+  "defaultSettings": {
+    "autoFetch": true,
+    "fetchInterval": 60,
+    "sourceUrl": "https://github.com/qianjin1111/ai-beauty-gallery/tree/main/images/celebrities/bai-lu",
+    "slideshowInterval": 3
+  },
+  "features": [
+    "自动轮播",
+    "手动控制",
+    "添加图片",
+    "删除图片",
+    "随机排列",
+    "自动拉取",
+    "本地存储",
+    "响应式设计"
+  ],
+  "categories": [
+    "红毯/活动",
+    "写真/大片",
+    "剧照",
+    "日常/机场",
+    "综艺",
+    "广告代言",
+    "杂志",
+    "活动/公开场合",
+    "其他"
+  ],
+  "defaultImages": [
+    {
+      "url": "https://raw.githubusercontent.com/qianjin1111/ai-beauty-gallery/main/images/celebrities/bai-lu/photoshoot/bb1b4ec8-33f4-4da5-8f44-487fba5bcbdb.jpg",
+      "category": "写真/大片",
+      "source": "ai-beauty-gallery"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/qianjin1111/ai-beauty-gallery/main/images/celebrities/bai-lu/photoshoot/6a721898-21f8-4644-b7de-11b08f14a68e.jpg",
+      "category": "写真/大片",
+      "source": "ai-beauty-gallery"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/qianjin1111/ai-beauty-gallery/main/images/celebrities/bai-lu/photoshoot/6ac2ef07-7cc8-4587-ab31-aa8b23a812bb.jpg",
+      "category": "写真/大片",
+      "source": "ai-beauty-gallery"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/qianjin1111/ai-beauty-gallery/main/images/celebrities/bai-lu/photoshoot/43fad7ba-ce32-4eda-ad9f-a8d48b06734e.jpg",
+      "category": "写真/大片",
+      "source": "ai-beauty-gallery"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/qianjin1111/ai-beauty-gallery/main/images/celebrities/bai-lu/daily/be5fe7de-721b-4fb8-bafd-330d48591bcb.jpg",
+      "category": "日常/机场",
+      "source": "ai-beauty-gallery"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/qianjin1111/ai-beauty-gallery/main/images/celebrities/bai-lu/daily/51b9992b-281b-4fb9-ba7d-abbaf10b9663.jpg",
+      "category": "日常/机场",
+      "source": "ai-beauty-gallery"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/qianjin1111/ai-beauty-gallery/main/images/celebrities/bai-lu/events/07c6c2b4-f962-4b9b-a6da-ad981162adf6.jpg",
+      "category": "活动/公开场合",
+      "source": "ai-beauty-gallery"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/qianjin1111/ai-beauty-gallery/main/images/celebrities/bai-lu/events/d889f8af-f51e-458e-8679-3d1145b39759.jpg",
+      "category": "活动/公开场合",
+      "source": "ai-beauty-gallery"
+    }
+  ],
+  "supportedFormats": [
+    "jpg",
+    "jpeg",
+    "png",
+    "gif",
+    "webp"
+  ],
+  "storage": {
+    "type": "localStorage",
+    "key": "baiLuPhotos",
+    "settingsKey": "baiLuSettings",
+    "maxImages": 500
+  },
+  "responsive": {
+    "breakpoints": {
+      "mobile": 768,
+      "tablet": 1024,
+      "desktop": 1200
+    }
+  }
+}

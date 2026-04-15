@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>白鹿照片墙 - 预览</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .preview-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 30px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 30px;
+        }
+
+        .preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .preview-card {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease;
+        }
+
+        .preview-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .preview-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+
+        .preview-info {
+            padding: 15px;
+        }
+
+        .preview-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .preview-description {
+            font-size: 0.9rem;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .preview-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .feature-badge {
+            background: #667eea;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        .demo-section {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 12px;
+            margin-top: 30px;
+        }
+
+        .demo-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #667eea;
+        }
+
+        .demo-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .demo-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .demo-btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .demo-btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .demo-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .screenshot-placeholder {
+            width: 100%;
+            height: 400px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+
+        .usage-guide {
+            margin-top: 30px;
+            padding: 20px;
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            border-radius: 8px;
+        }
+
+        .usage-guide h3 {
+            color: #856404;
+            margin-top: 0;
+        }
+
+        .usage-guide ol {
+            color: #856404;
+        }
+
+        .usage-guide li {
+            margin-bottom: 10px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: white;
+        }
+
+        .footer-link {
+            color: white;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="preview-container">
+        <h1>🦌 白鹿照片墙 - 功能预览</h1>
+
+        <div class="preview-grid">
+            <div class="preview-card">
+                <div class="preview-image">🔄</div>
+                <div class="preview-info">
+                    <div class="preview-title">自动轮播</div>
+                    <div class="preview-description">自动播放所有图片，支持自定义间隔时间，循环播放。</div>
+                    <div class="preview-features">
+                        <span class="feature-badge">自动播放</span>
+                        <span class="feature-badge">循环</span>
+                        <span class="feature-badge">可配置</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="preview-card">
+                <div class="preview-image">⏯️</div>
+                <div class="preview-info">
+                    <div class="preview-title">手动控制</div>
+                    <div class="preview-description">提供完整的控制按钮，支持上一张、下一张、暂停/播放。</div>
+                    <div class="preview-features">
+                        <span class="feature-badge">上一张</span>
+                        <span class="feature-badge">下一张</span>
+                        <span class="feature-badge">暂停</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="preview-card">
+                <div class="preview-image">🎲</div>
+                <div class="preview-info">
+                    <div class="preview-title">随机排列</div>
+                    <div class="preview-description">一键随机排列所有图片，每次都能获得新的播放顺序。</div>
+                    <div class="preview-features">
+                        <span class="feature-badge">随机算法</span>
+                        <span class="feature-badge">一键操作</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="preview-card">
+                <div class="preview-image">➕</div>
+                <div class="preview-info">
+                    <div class="preview-title">添加图片</div>
+                    <div class="preview-description">通过URL添加新图片，支持自定义分类和来源。</div>
+                    <div class="preview-features">
+                        <span class="feature-badge">URL添加</span>
+                        <span class="feature-badge">分类</span>
+                        <span class="feature-badge">来源</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="preview-card">
+                <div class="preview-image">🗑️</div>
+                <div class="preview-info">
+                    <div class="preview-title">删除图片</div>
+                    <div class="preview-description">支持批量删除图片，提供全选和清空功能。</div>
+                    <div class="preview-features">
+                        <span class="feature-badge">批量删除</span>
+                        <span class="feature-badge">全选</span>
+                        <span class="feature-badge">清空</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="preview-card">
+                <div class="preview-image">🔄</div>
+                <div class="preview-info">
+                    <div class="preview-title">自动拉取</div>
+                    <div class="preview-description">定时从GitHub仓库拉取新图片，支持手动刷新。</div>
+                    <div class="preview-features">
+                        <span class="feature-badge">定时拉取</span>
+                        <span class="feature-badge">手动刷新</span>
+                        <span class="feature-badge">去重</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="preview-card">
+                <div class="preview-image">💾</div>
+                <div class="preview-info">
+                    <div class="preview-title">本地存储</div>
+                    <div class="preview-description">图片和设置自动保存到本地，刷新页面不丢失数据。</div>
+                    <div class="preview-features">
+                        <span class="feature-badge">LocalStorage</span>
+                        <span class="feature-badge">自动保存</span>
+                        <span class="feature-badge">持久化</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="preview-card">
+                <div class="preview-image">📱</div>
+                <div class="preview-info">
+                    <div class="preview-title">响应式设计</div>
+                    <div class="preview-description">完美适配手机、平板、电脑等各种设备。</div>
+                    <div class="preview-features">
+                        <span class="feature-badge">手机</span>
+                        <span class="feature-badge">平板</span>
+                        <span class="feature-badge">电脑</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <div class="demo-title">🎬 在线演示</div>
+
+            <div class="demo-buttons">
+                <a href="index.html" class="demo-btn demo-btn-primary">🚀 打开照片墙</a>
+                <a href="https://github.com/qianjin1111/bai-lu-photo-wall" class="demo-btn demo-btn-secondary">📄 查看源码</a>
+            </div>
+
+            <div class="screenshot-placeholder">
+                <div>
+                    📸<br>
+                    这里将显示照片墙的实际效果<br>
+                    点击"打开照片墙"按钮体验完整功能
+                </div>
+            </div>
+        </div>
+
+        <div class="usage-guide">
+            <h3>📖 使用指南</h3>
+            <ol>
+                <li>点击"🚀 打开照片墙"按钮进入主界面</li>
+                <li>照片会自动开始轮播，使用控制按钮进行操作</li>
+                <li>在"添加图片"区域输入URL添加新图片</li>
+                <li>在"图片列表"中选择要删除的图片</li>
+                <li>点击"🔄 刷新图片"按钮从GitHub拉取新图片</li>
+                <li>在"设置"中调整轮播间隔和自动拉取配置</li>
+            </ol>
+        </div>
+    </div>
+
+    <footer>
+        <p>🦌 白鹿照片墙 | <a href="https://github.com/qianjin1111/bai-lu-photo-wall" class="footer-link" target="_blank">GitHub项目</a></p>
+    </footer>
+</body>
+</html>
