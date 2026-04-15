@@ -1,0 +1,1363 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🦌 白鹿 · 星海银河 | Bai Lu Star Gallery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=ZCOOL+XiaoWei&family=Noto+Serif+SC:wght@300;400;600&display=swap" rel="stylesheet" />
+  <style>
+    /* =============================================
+       GLOBAL RESET & VARIABLES
+    ============================================= */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gold: #d4af37;
+      --gold-light: #f0d060;
+      --gold-dark: #9a7020;
+      --rose: #c47a8a;
+      --dark: #0a0a12;
+      --dark2: #111120;
+      --glass: rgba(255,255,255,0.06);
+      --glass-border: rgba(255,255,255,0.12);
+      --text: #e8e4df;
+      --text-muted: rgba(232,228,223,0.55);
+      --accent: #e8c97a;
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      overflow: hidden;
+      background: var(--dark);
+      color: var(--text);
+      font-family: 'Noto Serif SC', serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* =============================================
+       CANVAS BACKGROUND (Stars + Nebula)
+    ============================================= */
+    #bg-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* =============================================
+       LOADING SCREEN
+    ============================================= */
+    #loading {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: var(--dark);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
+    }
+    #loading.hidden { opacity: 0; visibility: hidden; }
+
+    .loading-title {
+      font-family: 'ZCOOL XiaoWei', serif;
+      font-size: clamp(28px, 5vw, 52px);
+      color: var(--gold);
+      letter-spacing: 0.3em;
+      margin-bottom: 40px;
+      text-shadow: 0 0 30px rgba(212,175,55,0.5);
+    }
+
+    .loading-bar-wrap {
+      width: min(400px, 80vw);
+      height: 2px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .loading-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--gold-dark), var(--gold), var(--gold-light));
+      width: 0%;
+      transition: width 0.3s ease;
+      border-radius: 2px;
+      box-shadow: 0 0 10px var(--gold);
+    }
+    .loading-text {
+      margin-top: 16px;
+      font-size: 13px;
+      color: var(--text-muted);
+      letter-spacing: 0.1em;
+    }
+    .loading-deer {
+      font-size: 48px;
+      margin-bottom: 20px;
+      animation: float 2s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    /* =============================================
+       MAIN LAYOUT
+    ============================================= */
+    #app {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ---- Header ---- */
+    #header {
+      position: relative;
+      z-index: 100;
+      padding: 20px 32px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+
+    .brand {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .brand-title {
+      font-family: 'ZCOOL XiaoWei', serif;
+      font-size: clamp(20px, 3.5vw, 36px);
+      color: var(--gold);
+      letter-spacing: 0.25em;
+      text-shadow: 0 0 20px rgba(212,175,55,0.4);
+    }
+    .brand-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+    }
+
+    /* ---- Category Filter ---- */
+    #filter-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 12px 20px;
+    }
+    .filter-btn {
+      padding: 6px 16px;
+      border-radius: 20px;
+      border: 1px solid var(--glass-border);
+      background: var(--glass);
+      color: var(--text-muted);
+      font-family: 'Noto Serif SC', serif;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+      white-space: nowrap;
+    }
+    .filter-btn:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+      background: rgba(212,175,55,0.08);
+    }
+    .filter-btn.active {
+      background: linear-gradient(135deg, rgba(212,175,55,0.2), rgba(196,122,138,0.15));
+      border-color: var(--gold);
+      color: var(--gold);
+      box-shadow: 0 0 15px rgba(212,175,55,0.2);
+    }
+
+    /* ---- 3D Carousel Stage ---- */
+    #stage {
+      flex: 1;
+      position: relative;
+      min-height: 0;
+    }
+
+    #carousel-canvas {
+      position: absolute;
+      inset: 0;
+      cursor: grab;
+    }
+    #carousel-canvas:active { cursor: grabbing; }
+
+    /* Center Image Glow Frame */
+    #center-frame {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 10;
+    }
+    #center-frame svg {
+      width: clamp(220px, 32vw, 380px);
+      height: clamp(300px, 44vw, 520px);
+      filter: drop-shadow(0 0 30px rgba(212,175,55,0.25));
+    }
+
+    /* Center Info Overlay */
+    #center-info {
+      position: absolute;
+      bottom: 8%;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      z-index: 20;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+    #center-info.visible { opacity: 1; }
+    #center-info .ci-category {
+      font-size: 11px;
+      letter-spacing: 0.4em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    #center-info .ci-number {
+      font-size: 10px;
+      color: var(--text-muted);
+      letter-spacing: 0.15em;
+    }
+
+    /* =============================================
+       CONTROLS BAR
+    ============================================= */
+    #controls {
+      position: relative;
+      z-index: 100;
+      padding: 12px 32px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      flex-shrink: 0;
+    }
+
+    .ctrl-btn {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      border: 1px solid var(--glass-border);
+      background: var(--glass);
+      backdrop-filter: blur(15px);
+      color: var(--text);
+      font-size: 18px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .ctrl-btn:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+      background: rgba(212,175,55,0.1);
+      box-shadow: 0 0 20px rgba(212,175,55,0.2);
+    }
+    .ctrl-btn:active { transform: scale(0.93); }
+    .ctrl-btn.active {
+      border-color: var(--gold);
+      background: rgba(212,175,55,0.15);
+      color: var(--gold);
+    }
+
+    /* Play/Pause */
+    #btn-play {
+      width: 52px; height: 52px;
+      font-size: 22px;
+    }
+
+    /* Progress */
+    .ctrl-progress {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      min-width: 100px;
+    }
+    .ctrl-progress .cp-text {
+      font-size: 14px;
+      color: var(--text);
+      letter-spacing: 0.1em;
+      font-variant-numeric: tabular-nums;
+    }
+    .ctrl-progress .cp-bar {
+      width: 120px;
+      height: 2px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .ctrl-progress .cp-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--gold-dark), var(--gold));
+      border-radius: 2px;
+      transition: width 0.3s linear;
+    }
+
+    /* Speed */
+    .speed-ctrl {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .speed-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      letter-spacing: 0.1em;
+    }
+    .speed-btn {
+      padding: 4px 10px;
+      border-radius: 10px;
+      border: 1px solid var(--glass-border);
+      background: var(--glass);
+      color: var(--text-muted);
+      font-size: 11px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'Noto Serif SC', serif;
+    }
+    .speed-btn:hover, .speed-btn.active {
+      border-color: var(--gold);
+      color: var(--gold);
+      background: rgba(212,175,55,0.08);
+    }
+
+    /* Thumbnails Strip */
+    #thumb-strip {
+      position: absolute;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 6px;
+      z-index: 50;
+      padding: 8px 12px;
+      background: rgba(10,10,18,0.6);
+      backdrop-filter: blur(15px);
+      border-radius: 12px;
+      border: 1px solid var(--glass-border);
+      max-width: 90vw;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    #thumb-strip::-webkit-scrollbar { display: none; }
+
+    .thumb {
+      width: 36px; height: 36px;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      flex-shrink: 0;
+      opacity: 0.5;
+    }
+    .thumb.active {
+      border-color: var(--gold);
+      opacity: 1;
+      box-shadow: 0 0 12px rgba(212,175,55,0.4);
+      transform: scale(1.15);
+    }
+    .thumb:hover { opacity: 0.9; transform: scale(1.1); }
+    .thumb img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+
+    /* =============================================
+       SIDE STATS
+    ============================================= */
+    #side-stats {
+      position: fixed;
+      right: 24px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: flex-end;
+    }
+    .stat-item {
+      text-align: right;
+      background: var(--glass);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--glass-border);
+      border-radius: 8px;
+      padding: 8px 14px;
+    }
+    .stat-value {
+      font-size: 18px;
+      color: var(--gold);
+      font-weight: 600;
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 10px;
+      color: var(--text-muted);
+      letter-spacing: 0.15em;
+      margin-top: 2px;
+    }
+
+    /* =============================================
+       INSTRUCTION HINT
+    ============================================= */
+    #hint {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      font-size: 11px;
+      color: var(--text-muted);
+      letter-spacing: 0.15em;
+      text-align: center;
+      pointer-events: none;
+      opacity: 0.7;
+      transition: opacity 1s ease;
+    }
+    #hint.fade { opacity: 0; }
+
+    /* =============================================
+       LIGHTBOX
+    ============================================= */
+    #lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: rgba(5,5,10,0.92);
+      backdrop-filter: blur(20px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.4s ease;
+      cursor: pointer;
+    }
+    #lightbox.open { opacity: 1; visibility: visible; }
+    #lightbox img {
+      max-width: 90vw;
+      max-height: 90vh;
+      object-fit: contain;
+      border-radius: 4px;
+      box-shadow: 0 0 60px rgba(0,0,0,0.8);
+    }
+    #lightbox-close {
+      position: absolute;
+      top: 24px; right: 24px;
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      border: 1px solid var(--glass-border);
+      background: var(--glass);
+      color: var(--text);
+      font-size: 20px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
+    }
+    #lightbox-close:hover { background: rgba(255,255,255,0.1); }
+
+    /* =============================================
+       MOBILE RESPONSIVE
+    ============================================= */
+    @media (max-width: 600px) {
+      #header { padding: 12px 16px 0; }
+      #filter-bar { gap: 5px; padding: 8px 12px; }
+      .filter-btn { padding: 4px 10px; font-size: 11px; }
+      #controls { padding: 8px 16px 12px; gap: 12px; }
+      .ctrl-btn { width: 36px; height: 36px; font-size: 15px; }
+      #btn-play { width: 44px; height: 44px; font-size: 18px; }
+      #thumb-strip { bottom: 70px; }
+      #side-stats { display: none; }
+      .ctrl-progress .cp-bar { width: 80px; }
+      #center-info { bottom: 5%; }
+    }
+
+    /* =============================================
+       CUSTOM SCROLLBAR (for filtered views)
+    ============================================= */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 2px; }
+
+    /* =============================================
+       PARTICLE SPARKLE ANIMATION
+    ============================================= */
+    @keyframes sparkle {
+      0%, 100% { opacity: 0; transform: scale(0); }
+      50% { opacity: 1; transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Background Stars Canvas -->
+<canvas id="bg-canvas"></canvas>
+
+<!-- Loading Screen -->
+<div id="loading">
+  <div class="loading-deer">🦌</div>
+  <div class="loading-title">白鹿 · 星海</div>
+  <div class="loading-bar-wrap">
+    <div class="loading-bar" id="loading-bar"></div>
+  </div>
+  <div class="loading-text" id="loading-text">正在连接星海...</div>
+</div>
+
+<!-- Main App -->
+<div id="app">
+
+  <!-- Header -->
+  <div id="header">
+    <div class="brand">
+      <div class="brand-title">白鹿</div>
+      <div class="brand-sub">Star Gallery · 2026</div>
+    </div>
+  </div>
+
+  <!-- Category Filters -->
+  <div id="filter-bar"></div>
+
+  <!-- 3D Stage -->
+  <div id="stage">
+    <canvas id="carousel-canvas"></canvas>
+
+    <!-- Decorative Frame around center image -->
+    <div id="center-frame">
+      <svg viewBox="0 0 300 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Outer elegant border -->
+        <rect x="4" y="4" width="292" height="412" rx="8"
+          stroke="url(#frameGrad)" stroke-width="1.5"
+          stroke-dasharray="6 3" opacity="0.6"/>
+        <!-- Corner ornaments -->
+        <path d="M4 30 L4 4 L30 4" stroke="#d4af37" stroke-width="1.5" fill="none" opacity="0.8"/>
+        <path d="M270 4 L296 4 L296 30" stroke="#d4af37" stroke-width="1.5" fill="none" opacity="0.8"/>
+        <path d="M4 390 L4 416 L30 416" stroke="#d4af37" stroke-width="1.5" fill="none" opacity="0.8"/>
+        <path d="M270 416 L296 416 L296 390" stroke="#d4af37" stroke-width="1.5" fill="none" opacity="0.8"/>
+        <!-- Star ornaments at corners -->
+        <circle cx="4" cy="4" r="3" fill="#d4af37" opacity="0.9"/>
+        <circle cx="296" cy="4" r="3" fill="#d4af37" opacity="0.9"/>
+        <circle cx="4" cy="416" r="3" fill="#d4af37" opacity="0.9"/>
+        <circle cx="296" cy="416" r="3" fill="#d4af37" opacity="0.9"/>
+        <defs>
+          <linearGradient id="frameGrad" x1="0" y1="0" x2="300" y2="420">
+            <stop offset="0%" stop-color="#d4af37"/>
+            <stop offset="50%" stop-color="#f0d060" stop-opacity="0.5"/>
+            <stop offset="100%" stop-color="#d4af37"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+
+    <!-- Center Info -->
+    <div id="center-info">
+      <div class="ci-category" id="ci-category"></div>
+      <div class="ci-number" id="ci-number"></div>
+    </div>
+
+    <!-- Thumbnail Strip -->
+    <div id="thumb-strip"></div>
+  </div>
+
+  <!-- Controls -->
+  <div id="controls">
+    <!-- Prev -->
+    <button class="ctrl-btn" id="btn-prev" title="上一张">◀</button>
+
+    <!-- Progress -->
+    <div class="ctrl-progress">
+      <div class="cp-text"><span id="cp-current">1</span> / <span id="cp-total">0</span></div>
+      <div class="cp-bar"><div class="cp-fill" id="cp-fill" style="width:0%"></div></div>
+    </div>
+
+    <!-- Play/Pause -->
+    <button class="ctrl-btn" id="btn-play" title="自动播放">▶</button>
+
+    <!-- Next -->
+    <button class="ctrl-btn" id="btn-next" title="下一张">▶</button>
+
+    <!-- Speed -->
+    <div class="speed-ctrl">
+      <span class="speed-label">速度</span>
+      <button class="speed-btn active" data-speed="3">慢</button>
+      <button class="speed-btn" data-speed="5">中</button>
+      <button class="speed-btn" data-speed="8">快</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- Side Stats -->
+<div id="side-stats">
+  <div class="stat-item">
+    <div class="stat-value" id="stat-total">0</div>
+    <div class="stat-label">全部</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-value" id="stat-filtered">0</div>
+    <div class="stat-label">当前</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-value" id="stat-cat">--</div>
+    <div class="stat-label">分类</div>
+  </div>
+</div>
+
+<!-- Instruction Hint -->
+<div id="hint">← 左右滑动 / 拖拽旋转 · 点击图片放大 · 空格键暂停 · ↑↓切换分类 →</div>
+
+<!-- Lightbox -->
+<div id="lightbox">
+  <button id="lightbox-close">✕</button>
+  <img id="lightbox-img" src="" alt="" />
+</div>
+
+<!-- Three.js -->
+<script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
+
+<script>
+/* ======================================================
+   MAIN APPLICATION
+   ====================================================== */
+(function() {
+  'use strict';
+
+  // ---- State ----
+  let allImages = [];
+  let filteredImages = [];
+  let currentIndex = 0;
+  let activeCategory = '全部';
+  let isPlaying = false;
+  let playInterval = null;
+  let playSpeed = 3000; // ms
+  let carousel, scene, camera, renderer;
+  let cards = [];
+  let isDragging = false;
+  let prevMouseX = 0;
+  let velocity = 0;
+  let autoRotateTimer = null;
+  let touchStartX = 0;
+
+  // ---- DOM Elements ----
+  const $ = id => document.getElementById(id);
+  const loadingEl = $('loading');
+  const loadingBar = $('loading-bar');
+  const loadingText = $('loading-text');
+  const filterBar = $('filter-bar');
+  const thumbStrip = $('thumb-strip');
+  const centerInfo = $('center-info');
+  const ciCategory = $('ci-category');
+  const ciNumber = $('ci-number');
+  const cpCurrent = $('cp-current');
+  const cpTotal = $('cp-total');
+  const cpFill = $('cp-fill');
+  const btnPlay = $('btn-play');
+  const btnPrev = $('btn-prev');
+  const btnNext = $('btn-next');
+  const lightbox = $('lightbox');
+  const lightboxImg = $('lightbox-img');
+  const statTotal = $('stat-total');
+  const statFiltered = $('stat-filtered');
+  const statCat = $('stat-cat');
+  const hint = $('hint');
+
+  // ---- Config ----
+  const CONFIG = {
+    carouselRadius: 650,
+    cardWidth: 280,
+    cardHeight: 380,
+    visibleCards: 9,
+    rotateSpeed: 0.003,
+    dampingFactor: 0.92,
+    cameraZ: 900,
+    textureLoader: null,
+    raycaster: null,
+    mouse: null,
+  };
+
+  // ---- Star Background ----
+  function initStarBackground() {
+    const canvas = $('bg-canvas');
+    const ctx = canvas.getContext('2d');
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    // Stars
+    const stars = [];
+    const STAR_COUNT = 280;
+    for (let i = 0; i < STAR_COUNT; i++) {
+      stars.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 1.4 + 0.2,
+        alpha: Math.random(),
+        alphaDir: Math.random() > 0.5 ? 1 : -1,
+        speed: Math.random() * 0.008 + 0.002,
+        twinkle: Math.random() > 0.7,
+      });
+    }
+
+    // Nebula blobs
+    const nebulae = [
+      { x: 0.15, y: 0.3, r: 250, color: 'rgba(80,30,100,0.04)', vx: 0.05, vy: 0.03 },
+      { x: 0.8, y: 0.6, r: 300, color: 'rgba(20,50,120,0.05)', vx: -0.03, vy: -0.04 },
+      { x: 0.5, y: 0.8, r: 200, color: 'rgba(100,30,60,0.04)', vx: 0.04, vy: -0.02 },
+    ];
+
+    let t = 0;
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      t += 0.003;
+
+      // Gradient background
+      const grad = ctx.createRadialGradient(
+        canvas.width * 0.5, canvas.height * 0.4, 0,
+        canvas.width * 0.5, canvas.height * 0.4, canvas.width * 0.7
+      );
+      grad.addColorStop(0, 'rgba(15,12,30,1)');
+      grad.addColorStop(1, 'rgba(5,5,12,1)');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Nebula
+      nebulae.forEach(n => {
+        n.x += n.vx * 0.001;
+        n.y += n.vy * 0.001;
+        if (n.x < -0.1) n.x = 1.1;
+        if (n.x > 1.1) n.x = -0.1;
+        if (n.y < -0.1) n.y = 1.1;
+        if (n.y > 1.1) n.y = -0.1;
+        const ng = ctx.createRadialGradient(
+          n.x * canvas.width, n.y * canvas.height, 0,
+          n.x * canvas.width, n.y * canvas.height, n.r
+        );
+        ng.addColorStop(0, n.color);
+        ng.addColorStop(1, 'transparent');
+        ctx.fillStyle = ng;
+        ctx.beginPath();
+        ctx.arc(n.x * canvas.width, n.y * canvas.height, n.r, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      // Stars
+      stars.forEach(s => {
+        if (s.twinkle) {
+          s.alpha += s.alphaDir * s.speed;
+          if (s.alpha >= 1 || s.alpha <= 0.1) s.alphaDir *= -1;
+        } else {
+          s.alpha = 0.7 + Math.sin(t + s.x) * 0.3;
+        }
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255,250,235,${s.alpha})`;
+        ctx.fill();
+
+        // Glow for brighter stars
+        if (s.r > 1.0) {
+          const grd = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, s.r * 4);
+          grd.addColorStop(0, `rgba(255,240,200,${s.alpha * 0.3})`);
+          grd.addColorStop(1, 'transparent');
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.r * 4, 0, Math.PI * 2);
+          ctx.fillStyle = grd;
+          ctx.fill();
+        }
+      });
+
+      // Shooting stars
+      if (Math.random() < 0.002) {
+        const sx = Math.random() * canvas.width;
+        const sy = Math.random() * canvas.height * 0.5;
+        drawShootingStar(sx, sy);
+      }
+
+      requestAnimationFrame(draw);
+    }
+
+    const shootingStars = [];
+    function drawShootingStar(x, y) {
+      const len = 80 + Math.random() * 60;
+      const angle = -Math.PI / 4 + (Math.random() - 0.5) * 0.3;
+      const grad = ctx.createLinearGradient(x, y, x + Math.cos(angle) * len, y + Math.sin(angle) * len);
+      grad.addColorStop(0, 'rgba(255,250,220,0.9)');
+      grad.addColorStop(1, 'transparent');
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      ctx.lineTo(x + Math.cos(angle) * len, y + Math.sin(angle) * len);
+      ctx.strokeStyle = grad;
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+    }
+
+    draw();
+  }
+
+  // ---- Three.js Carousel ----
+  function initThreeJS() {
+    const canvas = $('carousel-canvas');
+    const stage = $('stage');
+    const w = stage.clientWidth;
+    const h = stage.clientHeight;
+
+    scene = new THREE.Scene();
+    scene.fog = new THREE.FogExp2(0x050510, 0.0008);
+
+    camera = new THREE.PerspectiveCamera(50, w / h, 1, 3000);
+    camera.position.z = CONFIG.cameraZ;
+
+    renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+    renderer.setSize(w, h);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setClearColor(0x000000, 0);
+
+    // Ambient + point lights
+    const ambient = new THREE.AmbientLight(0x334466, 0.6);
+    scene.add(ambient);
+    const pointA = new THREE.PointLight(0xd4af37, 1.2, 1500);
+    pointA.position.set(0, 200, 400);
+    scene.add(pointA);
+    const pointB = new THREE.PointLight(0x4488cc, 0.8, 1500);
+    pointB.position.set(0, -200, 600);
+    scene.add(pointB);
+
+    CONFIG.textureLoader = new THREE.TextureLoader();
+    CONFIG.raycaster = new THREE.Raycaster();
+    CONFIG.mouse = new THREE.Vector2();
+
+    window.addEventListener('resize', onResize);
+
+    // Mouse interaction on canvas
+    canvas.addEventListener('mousedown', onMouseDown);
+    canvas.addEventListener('mousemove', onMouseMove);
+    canvas.addEventListener('mouseup', onMouseUp);
+    canvas.addEventListener('mouseleave', onMouseUp);
+    canvas.addEventListener('click', onCanvasClick);
+    canvas.addEventListener('touchstart', onTouchStart, { passive: true });
+    canvas.addEventListener('touchmove', onTouchMove, { passive: false });
+    canvas.addEventListener('touchend', onTouchEnd, { passive: true });
+  }
+
+  function onResize() {
+    const stage = $('stage');
+    const w = stage.clientWidth;
+    const h = stage.clientHeight;
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+    renderer.setSize(w, h);
+  }
+
+  // ---- Create Image Cards ----
+  function buildCards(images) {
+    // Remove old cards
+    cards.forEach(c => scene.remove(c.mesh));
+    cards = [];
+
+    if (!images.length) return;
+
+    const n = images.length;
+    const angleStep = (Math.PI * 2) / n;
+    const visibleCount = Math.min(CONFIG.visibleCards, n);
+    const angleSpread = Math.PI * 0.55; // How wide the carousel arc is visible
+
+    images.forEach((img, i) => {
+      const angle = i * angleStep;
+
+      // Card geometry
+      const geom = new THREE.PlaneGeometry(CONFIG.cardWidth, CONFIG.cardHeight, 1, 1);
+      const mat = new THREE.MeshBasicMaterial({
+        color: 0x1a1a2e,
+        side: THREE.DoubleSide,
+        transparent: true,
+        opacity: 0,
+      });
+      const mesh = new THREE.Mesh(geom, mat);
+      mesh.userData = { index: i, image: img, targetOpacity: 0, currentOpacity: 0, angle };
+
+      // Border
+      const borderGeom = new THREE.EdgesGeometry(geom);
+      const borderMat = new THREE.LineBasicMaterial({
+        color: 0xd4af37,
+        transparent: true,
+        opacity: 0,
+        linewidth: 1,
+      });
+      const border = new THREE.LineSegments(borderGeom, borderMat);
+      mesh.add(border);
+      mesh.userData.border = border;
+
+      scene.add(mesh);
+      cards.push({ mesh, image: img, angle });
+    });
+
+    // Load textures
+    loadCardTextures(images);
+  }
+
+  function loadCardTextures(images) {
+    let loaded = 0;
+    const total = images.length;
+
+    images.forEach((img, i) => {
+      if (!img.url) { onCardTextureLoaded(i, null); return; }
+      CONFIG.textureLoader.load(
+        img.url,
+        texture => onCardTextureLoaded(i, texture),
+        undefined,
+        () => onCardTextureLoaded(i, null)
+      );
+    });
+  }
+
+  function onCardTextureLoaded(index, texture) {
+    if (!cards[index]) return;
+    const card = cards[index];
+    if (texture) {
+      const mat = new THREE.MeshBasicMaterial({
+        map: texture,
+        side: THREE.DoubleSide,
+        transparent: true,
+        opacity: 0,
+      });
+      card.mesh.material = mat;
+
+      // Border
+      const borderGeom = new THREE.EdgesGeometry(card.mesh.geometry);
+      const borderMat = new THREE.LineBasicMaterial({
+        color: 0xd4af37,
+        transparent: true,
+        opacity: 0,
+      });
+      card.mesh.children[0].material = borderMat;
+    }
+    card.mesh.userData.textureLoaded = true;
+    loaded++;
+    updateLoadingProgress(loaded / (cards.length * 2) * 0.6 + 0.3);
+
+    if (loaded >= cards.length) {
+      // All loaded
+      setTimeout(() => {
+        updateLoadingProgress(1);
+        setTimeout(hideLoading, 600);
+      }, 300);
+    }
+  }
+
+  // ---- Animation Loop ----
+  let targetRotation = 0;
+  let currentRotation = 0;
+  let globalRotation = 0;
+
+  function animate() {
+    requestAnimationFrame(animate);
+
+    // Smooth rotation
+    const diff = targetRotation - currentRotation;
+    currentRotation += diff * 0.08;
+    globalRotation = currentRotation;
+
+    const n = cards.length;
+    if (!n) { renderer.render(scene, camera); return; }
+
+    const stage = $('stage');
+    const w = stage.clientWidth;
+    const h = stage.clientHeight;
+
+    // Update camera
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+    renderer.setSize(w, h);
+
+    cards.forEach((card, i) => {
+      const cardAngle = card.angle + globalRotation;
+
+      // Position on cylinder
+      const x = Math.sin(cardAngle) * CONFIG.carouselRadius;
+      const z = Math.cos(cardAngle) * CONFIG.carouselRadius - CONFIG.carouselRadius;
+      card.mesh.position.set(x, 0, z);
+
+      // Face camera
+      card.mesh.lookAt(camera.position.x, camera.position.y, camera.position.z);
+
+      // Scale based on z (depth)
+      const scale = Math.max(0.35, (z + CONFIG.carouselRadius * 1.5) / (CONFIG.carouselRadius * 2.5));
+      card.mesh.scale.setScalar(scale);
+
+      // Opacity & visibility
+      const distFromCenter = Math.abs(((cardAngle % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2));
+      const halfArc = Math.PI * 0.6;
+      const isVisible = distFromCenter < halfArc || distFromCenter > Math.PI * 2 - halfArc;
+      const targetOpacity = isVisible ? Math.min(1, scale * 1.5) : 0;
+
+      card.mesh.material.opacity += (targetOpacity - card.mesh.material.opacity) * 0.12;
+      card.mesh.material.transparent = true;
+
+      // Border opacity
+      if (card.mesh.children[0]) {
+        card.mesh.children[0].material.opacity = card.mesh.material.opacity * 0.6;
+      }
+
+      // Subtle float
+      card.mesh.position.y = Math.sin(Date.now() * 0.001 + i * 0.8) * 4;
+
+      // Glow for center card
+      if (card.mesh.material.emissive) {
+        card.mesh.material.emissive.setScalar(0);
+      }
+    });
+
+    // Velocity damping
+    velocity *= CONFIG.dampingFactor;
+    if (Math.abs(velocity) < 0.0001) velocity = 0;
+
+    renderer.render(scene, camera);
+  }
+
+  // ---- Drag / Swipe ----
+  function onMouseDown(e) {
+    isDragging = true;
+    prevMouseX = e.clientX;
+    velocity = 0;
+    stopAutoPlay();
+  }
+
+  function onMouseMove(e) {
+    if (!isDragging) return;
+    const dx = e.clientX - prevMouseX;
+    velocity = dx * 0.0008;
+    targetRotation += dx * 0.005;
+    prevMouseX = e.clientX;
+    if (isPlaying) stopAutoPlay();
+  }
+
+  function onMouseUp() { isDragging = false; }
+
+  function onTouchStart(e) {
+    if (e.touches.length === 1) {
+      isDragging = true;
+      touchStartX = e.touches[0].clientX;
+      prevMouseX = touchStartX;
+      velocity = 0;
+      stopAutoPlay();
+    }
+  }
+
+  function onTouchMove(e) {
+    if (!isDragging || e.touches.length !== 1) return;
+    e.preventDefault();
+    const dx = e.touches[0].clientX - prevMouseX;
+    velocity = dx * 0.0008;
+    targetRotation += dx * 0.005;
+    prevMouseX = e.touches[0].clientX;
+  }
+
+  function onTouchEnd() { isDragging = false; }
+
+  function onCanvasClick(e) {
+    if (Math.abs(velocity) > 0.005) return; // was a drag
+    const rect = renderer.domElement.getBoundingClientRect();
+    CONFIG.mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+    CONFIG.mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+
+    CONFIG.raycaster.setFromCamera(CONFIG.mouse, camera);
+    const intersects = CONFIG.raycaster.intersectObjects(cards.map(c => c.mesh));
+    if (intersects.length > 0) {
+      const idx = intersects[0].object.userData.index;
+      if (idx === currentIndex) {
+        openLightbox(filteredImages[currentIndex]);
+      } else {
+        goToIndex(idx);
+      }
+    }
+  }
+
+  // ---- Navigation ----
+  function goToIndex(idx) {
+    if (!cards.length) return;
+    const n = cards.length;
+    const targetAngle = cards[idx].angle;
+    const currentCenter = -globalRotation;
+    let delta = targetAngle - currentCenter;
+
+    // Choose shortest path
+    while (delta > Math.PI) delta -= Math.PI * 2;
+    while (delta < -Math.PI) delta += Math.PI * 2;
+
+    targetRotation += delta;
+    currentIndex = ((idx % n) + n) % n;
+    updateCenterInfo();
+    updateThumbnail();
+    updateProgress();
+  }
+
+  function nextCard() {
+    if (!cards.length) return;
+    const n = cards.length;
+    // Find nearest next card
+    const step = Math.PI * 2 / n;
+    targetRotation -= step;
+    currentIndex = (currentIndex + 1) % n;
+    updateCenterInfo();
+    updateThumbnail();
+    updateProgress();
+  }
+
+  function prevCard() {
+    if (!cards.length) return;
+    const n = cards.length;
+    const step = Math.PI * 2 / n;
+    targetRotation += step;
+    currentIndex = (currentIndex - 1 + n) % n;
+    updateCenterInfo();
+    updateThumbnail();
+    updateProgress();
+  }
+
+  // ---- Auto Play ----
+  function startAutoPlay() {
+    if (isPlaying) return;
+    isPlaying = true;
+    btnPlay.textContent = '⏸';
+    btnPlay.classList.add('active');
+    playInterval = setInterval(nextCard, playSpeed);
+  }
+
+  function stopAutoPlay() {
+    if (!isPlaying) return;
+    isPlaying = false;
+    btnPlay.textContent = '▶';
+    btnPlay.classList.remove('active');
+    clearInterval(playInterval);
+  }
+
+  function toggleAutoPlay() {
+    if (isPlaying) stopAutoPlay(); else startAutoPlay();
+  }
+
+  // ---- UI Updates ----
+  function updateCenterInfo() {
+    if (!filteredImages.length) { centerInfo.classList.remove('visible'); return; }
+    const img = filteredImages[currentIndex];
+    ciCategory.textContent = img.category || '';
+    ciNumber.textContent = `${currentIndex + 1} / ${filteredImages.length}`;
+    statCat.textContent = img.category.split('/')[0].trim();
+    centerInfo.classList.add('visible');
+  }
+
+  function updateThumbnail() {
+    thumbStrip.querySelectorAll('.thumb').forEach((t, i) => {
+      t.classList.toggle('active', i === currentIndex);
+      // Scroll into view
+      if (i === currentIndex) t.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    });
+  }
+
+  function updateProgress() {
+    const n = filteredImages.length;
+    cpCurrent.textContent = n ? currentIndex + 1 : 0;
+    cpTotal.textContent = n;
+    cpFill.style.width = n ? ((currentIndex + 1) / n * 100) + '%' : '0%';
+    statFiltered.textContent = n;
+  }
+
+  function updateLoadingProgress(pct) {
+    loadingBar.style.width = (pct * 100) + '%';
+    loadingText.textContent = `正在加载星图... ${Math.round(pct * 100)}%`;
+  }
+
+  function hideLoading() {
+    loadingEl.classList.add('hidden');
+    // Fade hint after 5s
+    setTimeout(() => hint.classList.add('fade'), 5000);
+  }
+
+  // ---- Filters ----
+  function buildFilters(categories) {
+    filterBar.innerHTML = '';
+    const all = document.createElement('button');
+    all.className = 'filter-btn' + (activeCategory === '全部' ? ' active' : '');
+    all.textContent = '全部';
+    all.addEventListener('click', () => setFilter('全部'));
+    filterBar.appendChild(all);
+
+    categories.forEach(cat => {
+      const btn = document.createElement('button');
+      btn.className = 'filter-btn' + (activeCategory === cat ? ' active' : '');
+      btn.textContent = cat;
+      btn.addEventListener('click', () => setFilter(cat));
+      filterBar.appendChild(btn);
+    });
+  }
+
+  function setFilter(category) {
+    activeCategory = category;
+    stopAutoPlay();
+
+    filteredImages = category === '全部' ? allImages : allImages.filter(i => i.category === category);
+    currentIndex = 0;
+
+    buildCards(filteredImages);
+    buildThumbnails();
+
+    filterBar.querySelectorAll('.filter-btn').forEach(b => {
+      b.classList.toggle('active', b.textContent === category);
+    });
+
+    updateCenterInfo();
+    updateThumbnail();
+    updateProgress();
+    statFiltered.textContent = filteredImages.length;
+    statCat.textContent = category === '全部' ? '全部' : category.split('/')[0].trim();
+
+    // Start auto-play after loading
+    if (filteredImages.length > 1) {
+      setTimeout(startAutoPlay, 2000);
+    }
+  }
+
+  // ---- Thumbnails ----
+  function buildThumbnails() {
+    thumbStrip.innerHTML = '';
+    filteredImages.forEach((img, i) => {
+      const div = document.createElement('div');
+      div.className = 'thumb' + (i === currentIndex ? ' active' : '');
+      const imgEl = document.createElement('img');
+      imgEl.src = img.url;
+      imgEl.alt = img.category;
+      imgEl.loading = 'lazy';
+      div.appendChild(imgEl);
+      div.addEventListener('click', () => { stopAutoPlay(); goToIndex(i); });
+      thumbStrip.appendChild(div);
+    });
+  }
+
+  // ---- Lightbox ----
+  function openLightbox(img) {
+    if (!img || !img.url) return;
+    lightboxImg.src = img.url;
+    lightbox.classList.add('open');
+    stopAutoPlay();
+  }
+
+  function closeLightbox() {
+    lightbox.classList.remove('open');
+    lightboxImg.src = '';
+  }
+
+  // ---- Keyboard ----
+  function onKeyDown(e) {
+    switch (e.key) {
+      case 'ArrowLeft': prevCard(); stopAutoPlay(); break;
+      case 'ArrowRight': nextCard(); stopAutoPlay(); break;
+      case ' ': e.preventDefault(); toggleAutoPlay(); break;
+      case 'Escape': closeLightbox(); break;
+      case 'ArrowUp': cycleFilter(1); break;
+      case 'ArrowDown': cycleFilter(-1); break;
+    }
+  }
+
+  function cycleFilter(dir) {
+    const cats = ['全部', ...getCategories()];
+    const idx = cats.indexOf(activeCategory);
+    const next = ((idx + dir) + cats.length) % cats.length;
+    setFilter(cats[next]);
+  }
+
+  // ---- Helpers ----
+  function getCategories() {
+    const cats = [...new Set(allImages.map(i => i.category))];
+    return cats.sort();
+  }
+
+  // ---- Speed Controls ----
+  function setupSpeedControls() {
+    document.querySelectorAll('.speed-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const speed = parseInt(btn.dataset.speed);
+        playSpeed = 1000 / speed * 600;
+        document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        if (isPlaying) {
+          stopAutoPlay();
+          startAutoPlay();
+        }
+      });
+    });
+  }
+
+  // ---- Load Config & Init ----
+  async function loadConfig() {
+    updateLoadingProgress(0.05);
+    loadingText.textContent = '正在连接星图数据库...';
+
+    try {
+      const resp = await fetch('https://raw.githubusercontent.com/qianjin1111/beauty-gallery-hub/master/photo-wall/config.json');
+      const config = await resp.json();
+      updateLoadingProgress(0.2);
+      loadingText.textContent = '正在接收星图坐标...';
+
+      allImages = config.defaultImages || [];
+      if (!allImages.length) throw new Error('No images');
+
+      // Shuffle
+      allImages = allImages.sort(() => Math.random() - 0.5);
+
+      updateLoadingProgress(0.25);
+      loadingText.textContent = `发现 ${allImages.length} 张星图，准备展开...`;
+      statTotal.textContent = allImages.length;
+      statFiltered.textContent = allImages.length;
+
+      const categories = getCategories();
+      buildFilters(categories);
+
+      updateLoadingProgress(0.3);
+      loadingText.textContent = '正在构建三维星海...';
+
+      initThreeJS();
+      filteredImages = allImages;
+      buildCards(filteredImages);
+      buildThumbnails();
+      updateCenterInfo();
+      updateProgress();
+      setupSpeedControls();
+
+      document.addEventListener('keydown', onKeyDown);
+      btnPlay.addEventListener('click', toggleAutoPlay);
+      btnPrev.addEventListener('click', () => { stopAutoPlay(); prevCard(); });
+      btnNext.addEventListener('click', () => { stopAutoPlay(); nextCard(); });
+      lightbox.addEventListener('click', closeLightbox);
+      $('lightbox-close').addEventListener('click', e => { e.stopPropagation(); closeLightbox(); });
+
+      animate();
+
+    } catch (err) {
+      console.error('Load error:', err);
+      loadingText.textContent = '加载失败，请刷新重试';
+    }
+  }
+
+  // ---- Boot ----
+  initStarBackground();
+  loadConfig();
+
+})();
+</script>
+</body>
+</html>

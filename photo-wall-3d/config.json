@@ -1,0 +1,36 @@
+{
+  "name": "白鹿3D星海",
+  "version": "2.0.0",
+  "description": "白鹿 · 环绕式3D星海银河照片墙",
+  "author": "OpenClaw AI助手",
+  "source": {
+    "type": "git",
+    "url": "https://github.com/qianjin1111/ai-beauty-gallery"
+  },
+  "features": [
+    "3D圆柱环绕 carousel",
+    "星空粒子背景",
+    "自动轮播（可调速）",
+    "分类筛选",
+    "缩略图条",
+    "图片放大",
+    "键盘控制",
+    "触控滑动",
+    "响应式布局"
+  ],
+  "categories": [
+    "全部",
+    "红毯/活动",
+    "写真/大片",
+    "剧照",
+    "日常/机场",
+    "综艺",
+    "广告代言",
+    "活动/公开场合"
+  ],
+  "defaults": {
+    "slideshowInterval": 3,
+    "autoPlay": true,
+    "sourceUrl": "https://raw.githubusercontent.com/qianjin1111/beauty-gallery-hub/master/photo-wall/config.json"
+  }
+}
