@@ -49,6 +49,7 @@ class PhotoWall {
     }
 
     // 从本地存储加载图片
+    // 从本地存储加载图片
     loadImagesFromStorage() {
         const stored = localStorage.getItem('baiLuPhotos');
         if (stored) {
@@ -61,8 +62,11 @@ class PhotoWall {
                     img.url.includes('github.com/raw')
                 );
 
-                if (hasOldUrls) {
-                    console.warn('⚠️ 检测到旧格式的图片URL，自动清除并重新加载...');
+                // 检查是否只有8张图片（旧版本）
+                const hasOldVersion = this.images.length === 8;
+
+                if (hasOldUrls || hasOldVersion) {
+                    console.warn('⚠️ 检测到旧版本数据，自动清除并重新加载...');
                     localStorage.removeItem('baiLuPhotos');
                     this.images = [];
                 } else {
