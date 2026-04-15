@@ -1,0 +1,42 @@
+# AI Beauty Gallery - Git Ignore Configuration
+
+# 操作系统文件
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# 编辑器文件
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.settings/
+
+# 临时文件
+*.tmp
+*.temp
+*.log
+*.cache
+
+# AI生成文件（如果包含中间文件）
+*.checkpoint
+*.pt
+*.pth
+
+# 大文件警告（建议使用Git LFS）
+*.psd
+*.ai
+*.tiff
+
+# 注意：图片文件可以提交，但如果文件很大（>10MB），建议使用Git LFS
+# 如果要启用Git LFS，请运行：
+# git lfs install
+# git lfs track "*.jpg"
+# git lfs track "*.png"
+# git lfs track "*.webp"
