@@ -97,7 +97,9 @@ class PhotoWall {
     // 加载默认图片
     async loadDefaultImages() {
         try {
-            console.log('📥 开始加载默认白鹿照片...');
+            console.log('📥 开始加载白鹿照片...');
+            
+            // 先加载8张默认图片，确保快速显示
             const defaultImages = [
                 {
                     url: 'https://raw.githubusercontent.com/qianjin1111/beauty-gallery-hub/master/images/celebrities/bai-lu/daily/0f1782cf-c7f2-4783-b4de-cfc32b45b152.jpg',
@@ -143,11 +145,82 @@ class PhotoWall {
 
             this.images = defaultImages;
             this.saveImagesToStorage();
-            console.log('✅ 已加载', defaultImages.length, '张白鹿照片到localStorage');
-            this.showToast('已加载白鹿照片', 'success');
+            console.log('✅ 已加载', defaultImages.length, '张默认白鹿照片到localStorage');
+            
+            // 异步加载更多图片
+            this.loadAllImagesFromGitHub();
+            
+            this.showToast(`已加载${defaultImages.length}张照片，正在加载更多...`, 'success');
         } catch (error) {
             console.error('❌ 加载默认图片失败:', error);
             this.showToast('加载默认图片失败', 'error');
+        }
+    }
+
+    // 从GitHub加载所有图片
+    async loadAllImagesFromGitHub() {
+        try {
+            console.log('🌐 正在从GitHub加载所有白鹿照片...');
+            
+            const categoryMap = {
+                'ads': '广告/代言',
+                'daily': '日常/机场',
+                'events': '活动/公开场合',
+                'magazine': '杂志',
+                'others': '其他',
+                'photoshoot': '写真/大片',
+                'red-carpet': '红毯',
+                'tv-series': '影视',
+                'variety': '综艺'
+            };
+
+            // 获取所有分类的图片
+            const categories = Object.keys(categoryMap);
+            const allImages = [];
+
+            for (const category of categories) {
+                try {
+                    const response = await fetch(`https://api.github.com/repos/qianjin1111/beauty-gallery-hub/contents/images/celebrities/bai-lu/${category}`);
+                    if (response.ok) {
+                        const files = await response.json();
+                        const imageFiles = files.filter(file => file.type === 'file' && (file.name.endsWith('.jpg') || file.name.endsWith('.png')));
+                        
+                        imageFiles.forEach(file => {
+                            allImages.push({
+                                url: file.download_url,
+                                category: categoryMap[category] || category,
+                                source: 'beauty-gallery-hub'
+                            });
+                        });
+                        
+                        console.log(`✅ ${category}分类: ${imageFiles.length}张`);
+                    }
+                } catch (error) {
+                    console.error(`❌ 加载${category}分类失败:`, error);
+                }
+            }
+
+            // 随机排序并限制数量（避免过多影响性能）
+            allImages.sort(() => Math.random() - 0.5);
+            const maxImages = 100; // 最多显示100张
+            const selectedImages = allImages.slice(0, maxImages);
+
+            // 更新图片列表
+            this.images = selectedImages;
+            this.saveImagesToStorage();
+            
+            // 更新UI
+            this.updateDisplay();
+            this.updateThumbnails();
+            this.updateImageList();
+            this.updateStats();
+            
+            console.log(`✅ 从GitHub加载了${allImages.length}张照片，显示${selectedImages.length}张`);
+            this.showToast(`已更新为${selectedImages.length}张照片`, 'success');
+            
+        } catch (error) {
+            console.error('❌ 从GitHub加载图片失败:', error);
+            this.showToast('加载更多照片失败', 'error');
         }
     }
 
@@ -400,62 +473,8 @@ class PhotoWall {
     // 刷新图片（从GitHub拉取）
     async refreshPhotos() {
         try {
-            this.showToast('正在刷新白鹿照片...', 'info');
-
-            // 从beauty-gallery-hub仓库获取更多白鹿照片
-            const newImages = [
-                {
-                    url: 'https://raw.githubusercontent.com/qianjin1111/beauty-gallery-hub/master/images/celebrities/bai-lu/daily/51b9992b-281b-4fb9-ba7d-abbaf10b9663.jpg',
-                    category: '日常/机场',
-                    source: 'beauty-gallery-hub'
-                },
-                {
-                    url: 'https://raw.githubusercontent.com/qianjin1111/beauty-gallery-hub/master/images/celebrities/bai-lu/daily/597210df-fe24-4aa1-96f2-dac2e3521bee.jpg',
-                    category: '日常/机场',
-                    source: 'beauty-gallery-hub'
-                },
-                {
-                    url: 'https://raw.githubusercontent.com/qianjin1111/beauty-gallery-hub/master/images/celebrities/bai-lu/daily/5afb9b04-751f-45b0-961f-66cee9d0a703.jpg',
-                    category: '日常/机场',
-                    source: 'beauty-gallery-hub'
-                },
-                {
-                    url: 'https://raw.githubusercontent.com/qianjin1111/beauty-gallery-hub/master/images/celebrities/bai-lu/ads/fa3e7f57-b70a-424d-8c30-ade083d8f2ea.jpg',
-                    category: '广告/代言',
-                    source: 'beauty-gallery-hub'
-                },
-                {
-                    url: 'https://raw.githubusercontent.com/qianjin1111/beauty-gallery-hub/master/images/celebrities/bai-lu/daily/60165cd6-d8ea-4f7a-9146-a2252f32a761.jpg',
-                    category: '日常/机场',
-                    source: 'beauty-gallery-hub'
-                }
-            ];
-
-            // 添加新图片（去重）
-            let addedCount = 0;
-            newImages.forEach(newImage => {
-                const exists = this.images.some(img => img.url === newImage.url);
-                if (!exists) {
-                    this.images.push(newImage);
-                    addedCount++;
-                }
-            });
-
-            if (addedCount > 0) {
-                this.saveImagesToStorage();
-                this.updateDisplay();
-                this.updateThumbnails();
-                this.updateImageList();
-                this.updateStats();
-                this.showToast(`已添加 ${addedCount} 张白鹿照片`, 'success');
-            } else {
-                this.showToast('没有新照片可添加', 'info');
-            }
-
-            // 重置最后更新时间
-            const now = new Date();
-            document.getElementById('lastUpdate').textContent = now.toLocaleString('zh-CN');
-
+            this.showToast('正在从GitHub加载所有白鹿照片...', 'info');
+            await this.loadAllImagesFromGitHub();
         } catch (error) {
             this.showToast('刷新照片失败', 'error');
             console.error('刷新照片失败:', error);
