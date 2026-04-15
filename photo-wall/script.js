@@ -69,44 +69,44 @@ class PhotoWall {
         try {
             const defaultImages = [
                 {
-                    url: 'images/celebrities/bai-lu/photoshoot/02674f47-63f0-4d61-b286-6fb837335b20.jpg',
-                    category: '写真/大片',
-                    source: 'local'
-                },
-                {
-                    url: 'images/celebrities/bai-lu/photoshoot/0bdda75c-75f6-493a-84be-8db14e33e01d.jpg',
-                    category: '写真/大片',
-                    source: 'local'
-                },
-                {
-                    url: 'images/celebrities/bai-lu/photoshoot/1a64ebc3-339b-4844-b92b-e194c9f6ac01.jpg',
-                    category: '写真/大片',
-                    source: 'local'
-                },
-                {
-                    url: 'images/celebrities/bai-lu/photoshoot/1a8d0370-226f-4383-96ce-9e302651b309.jpg',
-                    category: '写真/大片',
-                    source: 'local'
-                },
-                {
-                    url: 'images/celebrities/bai-lu/daily/0f1782cf-c7f2-4783-b4de-cfc32b45b152.jpg',
+                    url: 'https://qianjin1111.github.io/beauty-gallery-hub/images/celebrities/bai-lu/daily/0f1782cf-c7f2-4783-b4de-cfc32b45b152.jpg',
                     category: '日常/机场',
-                    source: 'local'
+                    source: 'github-pages'
                 },
                 {
-                    url: 'images/celebrities/bai-lu/daily/110454c8-da55-4b07-bf12-bcda410e3b11.jpg',
+                    url: 'https://qianjin1111.github.io/beauty-gallery-hub/images/celebrities/bai-lu/daily/110454c8-da55-4b07-bf12-bcda410e3b11.jpg',
                     category: '日常/机场',
-                    source: 'local'
+                    source: 'github-pages'
                 },
                 {
-                    url: 'images/celebrities/bai-lu/events/022d6b94-9b38-4877-8c50-d9a70dfc9f6f.jpg',
-                    category: '活动/公开场合',
-                    source: 'local'
+                    url: 'https://qianjin1111.github.io/beauty-gallery-hub/images/celebrities/bai-lu/ads/114b0986-f0f4-4297-8012-d2e17e892bad.jpg',
+                    category: '广告/代言',
+                    source: 'github-pages'
                 },
                 {
-                    url: 'images/celebrities/bai-lu/events/07c6c2b4-f962-4b9b-a6da-ad981162adf6.jpg',
-                    category: '活动/公开场合',
-                    source: 'local'
+                    url: 'https://qianjin1111.github.io/beauty-gallery-hub/images/celebrities/bai-lu/ads/4d18ce6f-9ea7-4bfd-9953-bf028a416870.jpg',
+                    category: '广告/代言',
+                    source: 'github-pages'
+                },
+                {
+                    url: 'https://qianjin1111.github.io/beauty-gallery-hub/images/celebrities/bai-lu/daily/3ba01e20-719e-42e4-a81c-aaf3a43ff545.jpg',
+                    category: '日常/机场',
+                    source: 'github-pages'
+                },
+                {
+                    url: 'https://qianjin1111.github.io/beauty-gallery-hub/images/celebrities/bai-lu/daily/3e87bfea-521d-4c90-9dfa-3cfc022faa66.jpg',
+                    category: '日常/机场',
+                    source: 'github-pages'
+                },
+                {
+                    url: 'https://qianjin1111.github.io/beauty-gallery-hub/images/celebrities/bai-lu/daily/4045425a-b38b-4335-954e-f3c30ba362c5.jpg',
+                    category: '日常/机场',
+                    source: 'github-pages'
+                },
+                {
+                    url: 'https://qianjin1111.github.io/beauty-gallery-hub/images/celebrities/bai-lu/daily/437945a9-5d29-433b-ac02-3177ac7de765.jpg',
+                    category: '日常/机场',
+                    source: 'github-pages'
                 }
             ];
 
@@ -363,29 +363,29 @@ class PhotoWall {
             // 从beauty-gallery-hub仓库获取更多白鹿照片
             const newImages = [
                 {
-                    url: 'images/celebrities/bai-lu/photoshoot/feb9456c-c1b2-43ff-95fd-f28e9d5ccfb1.jpg',
-                    category: '写真/大片',
-                    source: 'local'
-                },
-                {
-                    url: 'images/celebrities/bai-lu/photoshoot/1a8d0370-226f-4383-96ce-9e302651b309.jpg',
-                    category: '写真/大片',
-                    source: 'local'
-                },
-                {
-                    url: 'images/celebrities/bai-lu/photoshoot/38f5c696-28ff-4f9b-8102-9eaacb569a08.jpg',
-                    category: '写真/大片',
-                    source: 'local'
-                },
-                {
-                    url: 'images/celebrities/bai-lu/photoshoot/cb94868e-8448-4139-b842-54a6de164b62.jpg',
-                    category: '写真/大片',
-                    source: 'local'
-                },
-                {
-                    url: 'images/celebrities/bai-lu/daily/8d0c1dda-e15e-4287-9bea-a717237e94a9.jpg',
+                    url: 'https://qianjin1111.github.io/beauty-gallery-hub/images/celebrities/bai-lu/daily/51b9992b-281b-4fb9-ba7d-abbaf10b9663.jpg',
                     category: '日常/机场',
-                    source: 'local'
+                    source: 'github-pages'
+                },
+                {
+                    url: 'https://qianjin1111.github.io/beauty-gallery-hub/images/celebrities/bai-lu/daily/597210df-fe24-4aa1-96f2-dac2e3521bee.jpg',
+                    category: '日常/机场',
+                    source: 'github-pages'
+                },
+                {
+                    url: 'https://qianjin1111.github.io/beauty-gallery-hub/images/celebrities/bai-lu/daily/5afb9b04-751f-45b0-961f-66cee9d0a703.jpg',
+                    category: '日常/机场',
+                    source: 'github-pages'
+                },
+                {
+                    url: 'https://qianjin1111.github.io/beauty-gallery-hub/images/celebrities/bai-lu/ads/fa3e7f57-b70a-424d-8c30-ade083d8f2ea.jpg',
+                    category: '广告/代言',
+                    source: 'github-pages'
+                },
+                {
+                    url: 'https://qianjin1111.github.io/beauty-gallery-hub/images/celebrities/bai-lu/daily/60165cd6-d8ea-4f7a-9146-a2252f32a761.jpg',
+                    category: '日常/机场',
+                    source: 'github-pages'
                 }
             ];
 
