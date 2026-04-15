@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图片链接测试 - Beauty Gallery Hub</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-item {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .test-item h3 {
+            margin-top: 0;
+            color: #666;
+        }
+        .image-url {
+            background: #f9f9f9;
+            padding: 10px;
+            border-radius: 4px;
+            word-break: break-all;
+            font-family: monospace;
+            font-size: 12px;
+            margin: 10px 0;
+        }
+        .test-image {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .status-success {
+            background: #d4edda;
+            color: #155724;
+        }
+        .status-error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .loading {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 图片链接测试页面</h1>
+
+    <div class="test-section">
+        <h2>测试说明</h2>
+        <p>此页面用于测试beauty-gallery-hub项目中的图片链接是否可以正常访问。</p>
+        <p>如果所有图片都能正常显示，说明照片墙应该也可以正常工作了。</p>
+        <a href="index.html" class="button">🚀 返回照片墙主页</a>
+    </div>
+
+    <div class="test-section">
+        <h2>测试图片</h2>
+        <div id="test-images"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>测试结果统计</h2>
+        <p>成功加载：<span id="success-count" style="color: green; font-weight: bold;">0</span> / <span id="total-count">8</span></p>
+        <p>失败加载：<span id="error-count" style="color: red; font-weight: bold;">0</span></p>
+    </div>
+
+    <script>
+        const testImages = [
+            {
+                url: 'https://raw.githubusercontent.com/qianjin1111/beauty-gallery-hub/master/images/celebrities/bai-lu/daily/0f1782cf-c7f2-4783-b4de-cfc32b45b152.jpg',
+                category: '日常/机场',
+                name: '图片1'
+            },
+            {
+                url: 'https://raw.githubusercontent.com/qianjin1111/beauty-gallery-hub/master/images/celebrities/bai-lu/daily/110454c8-da55-4b07-bf12-bcda410e3b11.jpg',
+                category: '日常/机场',
+                name: '图片2'
+            },
+            {
+                url: 'https://raw.githubusercontent.com/qianjin1111/beauty-gallery-hub/master/images/celebrities/bai-lu/ads/114b0986-f0f4-4297-8012-d2e17e892bad.jpg',
+                category: '广告/代言',
+                name: '图片3'
+            },
+            {
+                url: 'https://raw.githubusercontent.com/qianjin1111/beauty-gallery-hub/master/images/celebrities/bai-lu/ads/4d18ce6f-9ea7-4bfd-9953-bf028a416870.jpg',
+                category: '广告/代言',
+                name: '图片4'
+            },
+            {
+                url: 'https://raw.githubusercontent.com/qianjin1111/beauty-gallery-hub/master/images/celebrities/bai-lu/daily/3ba01e20-719e-42e4-a81c-aaf3a43ff545.jpg',
+                category: '日常/机场',
+                name: '图片5'
+            },
+            {
+                url: 'https://raw.githubusercontent.com/qianjin1111/beauty-gallery-hub/master/images/celebrities/bai-lu/daily/3e87bfea-521d-4c90-9dfa-3cfc022faa66.jpg',
+                category: '日常/机场',
+                name: '图片6'
+            },
+            {
+                url: 'https://raw.githubusercontent.com/qianjin1111/beauty-gallery-hub/master/images/celebrities/bai-lu/daily/4045425a-b38b-4335-954e-f3c30ba362c5.jpg',
+                category: '日常/机场',
+                name: '图片7'
+            },
+            {
+                url: 'https://raw.githubusercontent.com/qianjin1111/beauty-gallery-hub/master/images/celebrities/bai-lu/daily/437945a9-5d29-433b-ac02-3177ac7de765.jpg',
+                category: '日常/机场',
+                name: '图片8'
+            }
+        ];
+
+        let successCount = 0;
+        let errorCount = 0;
+        const testContainer = document.getElementById('test-images');
+        const successCountEl = document.getElementById('success-count');
+        const errorCountEl = document.getElementById('error-count');
+        const totalCountEl = document.getElementById('total-count');
+
+        totalCountEl.textContent = testImages.length;
+
+        testImages.forEach((img, index) => {
+            const testItem = document.createElement('div');
+            testItem.className = 'test-item';
+
+            const statusEl = document.createElement('span');
+            statusEl.className = 'status loading';
+            statusEl.textContent = '加载中...';
+
+            const title = document.createElement('h3');
+            title.textContent = `${img.name} - ${img.category}`;
+
+            const urlDiv = document.createElement('div');
+            urlDiv.className = 'image-url';
+            urlDiv.textContent = img.url;
+
+            const testImg = new Image();
+            testImg.className = 'test-image';
+            testImg.alt = img.name;
+
+            testImg.onload = function() {
+                statusEl.className = 'status status-success';
+                statusEl.textContent = '✅ 加载成功';
+                successCount++;
+                successCountEl.textContent = successCount;
+            };
+
+            testImg.onerror = function() {
+                statusEl.className = 'status status-error';
+                statusEl.textContent = '❌ 加载失败';
+                errorCount++;
+                errorCountEl.textContent = errorCount;
+                testImg.style.display = 'none';
+            };
+
+            testItem.appendChild(statusEl);
+            testItem.appendChild(title);
+            testItem.appendChild(urlDiv);
+            testItem.appendChild(testImg);
+
+            testContainer.appendChild(testItem);
+
+            // 设置图片源
+            testImg.src = img.url;
+        });
+
+        console.log('🧪 图片链接测试已启动');
+        console.log('📊 测试图片数量:', testImages.length);
+    </script>
+</body>
+</html>
