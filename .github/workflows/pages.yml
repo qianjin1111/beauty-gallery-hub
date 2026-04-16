@@ -27,17 +27,22 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
-      # Deploy photo-wall (main gallery)
-      - name: Upload artifact - photo-wall
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./photo-wall
+      # 创建构建目录
+      - name: Create build directory
+        run: |
+          mkdir -p build
+          # 复制主页面
+          cp index.html build/
+          # 复制 photo-wall 目录
+          cp -r photo-wall build/
+          # 复制 photo-wall-3d 目录
+          cp -r photo-wall-3d build/
 
-      # Deploy photo-wall-3d (3D gallery)
-      - name: Upload artifact - photo-wall-3d
+      # 部署整个构建目录
+      - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./photo-wall-3d
+          path: ./build
 
       - name: Deploy to GitHub Pages
         id: deployment
