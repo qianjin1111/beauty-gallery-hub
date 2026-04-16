@@ -1,4 +1,4 @@
-name: Deploy Photo-Wall to GitHub Pages
+name: Deploy Beauty Gallery to GitHub Pages
 
 on:
   push:
@@ -27,10 +27,17 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
-      - name: Upload artifact
+      # Deploy photo-wall (main gallery)
+      - name: Upload artifact - photo-wall
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./photo-wall
+
+      # Deploy photo-wall-3d (3D gallery)
+      - name: Upload artifact - photo-wall-3d
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./photo-wall-3d
 
       - name: Deploy to GitHub Pages
         id: deployment

@@ -143,6 +143,33 @@
       text-transform: uppercase;
     }
 
+    .header-nav {
+      display: flex;
+      gap: 12px;
+    }
+    .nav-btn {
+      padding: 8px 18px;
+      border-radius: 20px;
+      border: 1px solid var(--glass-border);
+      background: var(--glass);
+      color: var(--text-muted);
+      font-size: 13px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      letter-spacing: 0.05em;
+    }
+    .nav-btn:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+      background: rgba(212,175,55,0.1);
+    }
+    .nav-btn.active {
+      border-color: var(--gold);
+      color: var(--gold);
+      background: rgba(212,175,55,0.15);
+      font-weight: bold;
+    }
+
     /* ---- Category Filter ---- */
     #filter-bar {
       display: flex;
@@ -474,7 +501,9 @@
        MOBILE RESPONSIVE
     ============================================= */
     @media (max-width: 600px) {
-      #header { padding: 12px 16px 0; }
+      #header { padding: 12px 16px 0; flex-wrap: wrap; gap: 10px; }
+      .header-nav { width: 100%; justify-content: center; }
+      .nav-btn { padding: 6px 14px; font-size: 12px; }
       #filter-bar { gap: 5px; padding: 8px 12px; }
       .filter-btn { padding: 4px 10px; font-size: 11px; }
       #controls { padding: 8px 16px 12px; gap: 12px; }
@@ -525,6 +554,10 @@
     <div class="brand">
       <div class="brand-title">白鹿</div>
       <div class="brand-sub">Star Gallery · 2026</div>
+    </div>
+    <div class="header-nav">
+      <a href="../photo-wall/" class="nav-btn">📷 瀑布流</a>
+      <a href="index.html" class="nav-btn active">✨ 3D星海</a>
     </div>
   </div>
 
