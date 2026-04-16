@@ -1,169 +1,213 @@
-# 🌸 Beauty Gallery Hub
+# 白鹿美图馆 - 项目说明
 
-> 美女图片中心 - AI生成 + 白鹿照片墙
+## 🌟 项目简介
 
-## 📖 项目简介
+白鹿美图馆是一个现代化的照片展示平台，提供两种不同的浏览模式：瀑布流和3D星海。项目采用纯前端技术实现，无需后端支持，部署在 GitHub Pages 上。
 
-本项目是一个综合性的美女图片中心，包含：
+## 🎯 项目特点
 
-1. **AI生成图片**：使用AI技术生成的多样化美女图片
-2. **白鹿照片墙**：白鹿明星的照片展示墙，支持轮播和管理
+### 两种浏览模式
 
-## 🎨 图片内容
+#### 📷 瀑布流模式
+- 自动轮播照片
+- 大图预览功能
+- 图片分类管理
+- 键盘快捷键支持
+- 图片添加和删除
 
-### AI生成图片
-- 风格多样化（写实、二次元、艺术等）
-- 100张高质量AI美女图片
-- 4个主要分类
+#### ✨ 3D星海模式
+- 3D旋转木马效果
+- 星空背景动画
+- 分类筛选功能
+- 沉浸式体验
+- 响应式设计
 
-### 白鹿照片
-- 白鹿明星的精选照片
-- 9个标准分类
-- 支持在线浏览和管理
+### 技术亮点
+- 纯前端实现（HTML + CSS + JavaScript）
+- 无框架依赖
+- 响应式设计
+- 移动端完美支持
+- GitHub Pages 自动部署
+- 开源免费
+
+## 🚀 快速开始
+
+### 访问地址
+- **主页**: https://qianjin1111.github.io/beauty-gallery-hub/
+- **瀑布流**: https://qianjin1111.github.io/beauty-gallery-hub/photo-wall/
+- **3D星海**: https://qianjin1111.github.io/beauty-gallery-hub/photo-wall-3d/
+
+### 本地运行
+```bash
+# 克隆仓库
+git clone https://github.com/qianjin1111/beauty-gallery-hub.git
+
+# 进入目录
+cd beauty-gallery-hub
+
+# 使用 Live Server 或其他 HTTP 服务器
+# 例如使用 Python:
+python -m http.server 8000
+
+# 访问 http://localhost:8000
+```
 
 ## 📁 项目结构
 
 ```
 beauty-gallery-hub/
-├── README.md              # 项目说明
-├── images/               # 图片目录
-│   ├── realistic/        # 写实风格（AI）
-│   ├── anime/            # 二次元风格（AI）
-│   ├── artistic/         # 艺术风格（AI）
-│   ├── others/           # 其他风格（AI）
-│   ├── README.md         # 图片目录说明
-│   └── celebrities/      # 明星专区
-│       └── bai-lu/       # 白鹿
-│           ├── ads/           # 广告
-│           ├── daily/         # 日常
-│           ├── events/        # 活动/演出
-│           ├── magazine/      # 杂志
-│           ├── others/        # 其他
-│           ├── photoshoot/    # 写真
-│           ├── red-carpet/    # 红毯
-│           ├── tv-series/     # 影视
-│           └── variety/       # 综艺
-├── photo-wall/           # 白鹿照片墙
-│   ├── index.html        # 主页面
-│   ├── style.css         # 样式文件
-│   ├── script.js         # 功能脚本
-│   ├── config.json       # 配置文件
-│   ├── preview.html      # 预览页面
-│   └── README.md         # 照片墙说明
-└── .gitignore            # Git忽略配置
+├── index.html                    # 主页导航页面
+├── photo-wall/                   # 瀑布流模式
+│   ├── index.html               # 主页面
+│   ├── style.css                # 样式文件
+│   ├── script.js                # 功能脚本
+│   ├── config.json              # 配置文件
+│   ├── test.html                # 测试页面
+│   ├── test-images.html         # 图片测试
+│   ├── verify.html              # 验证页面
+│   ├── diagnosis.html           # 诊断页面
+│   └── MODAL_FEATURE.md         # 功能说明
+├── photo-wall-3d/               # 3D星海模式
+│   ├── index.html               # 主页面
+│   ├── preview.html             # 预览页面
+│   └── config.json              # 配置文件
+├── .github/                     # GitHub 配置
+│   └── workflows/
+│       └── pages.yml            # 自动部署配置
+├── images/                      # 图片资源
+│   └── celebrities/
+│       └── bai-lu/              # 白鹿照片
+├── docs/                        # 项目文档
+├── README.md                    # 项目说明
+└── ...                          # 其他文档
 ```
 
-## 🚀 功能特性
+## 🛠️ 技术栈
 
-### 白鹿照片墙 ✨
-- 🔄 自动轮播，可自定义间隔
-- ⏯️ 手动控制（上一张/下一张/暂停）
-- 🎲 随机排列
-- ➕ 添加图片
-- 🗑️ 删除图片
-- 🔄 自动拉取
-- 💾 本地存储
-- 📱 响应式设计
+### 前端技术
+- **HTML5**: 页面结构
+- **CSS3**: 样式和动画
+- **JavaScript**: 交互功能
+- **Three.js**: 3D效果（仅3D星海模式）
 
-### AI图片库 🎨
-- 100张高质量AI生成图片
-- 4种主要风格
-- 完整的分类体系
-- 详细的清单文档
+### 开发工具
+- **Git**: 版本控制
+- **GitHub Pages**: 托管和部署
+- **GitHub Actions**: 自动部署
 
-## 🌐 访问地址
+## 📚 功能说明
 
-### 白鹿照片墙
-- **主页**：https://qianjin1111.github.io/beauty-gallery-hub/
-- **预览**：https://qianjin1111.github.io/beauty-gallery-hub/preview.html
+### 瀑布流模式
+- ✅ 自动轮播照片
+- ✅ 大图预览功能
+- ✅ 图片分类管理
+- ✅ 添加/删除照片
+- ✅ 随机切换
+- ✅ 键盘快捷键
+- ✅ 图片懒加载
+- ✅ 本地存储
 
-### 图片仓库
-- **GitHub仓库**：https://github.com/qianjin1111/beauty-gallery-hub
-- **AI图片**：https://github.com/qianjin1111/beauty-gallery-hub/tree/main/images
-- **白鹿照片**：https://github.com/qianjin1111/beauty-gallery-hub/tree/main/images/celebrities/bai-lu
+### 3D星海模式
+- ✅ 3D旋转木马
+- ✅ 星空背景动画
+- ✅ 分类筛选
+- ✅ 鼠标拖拽交互
+- ✅ 自动旋转
+- ✅ 响应式设计
 
-## 📖 使用方法
+### 主页导航
+- ✅ 动态星空背景
+- ✅ 卡片式导航
+- ✅ 流畅动画效果
+- ✅ 移动端适配
 
-### 使用白鹿照片墙
+## 🔧 配置说明
 
-1. 访问照片墙主页
-2. 查看自动轮播的白鹿照片
-3. 使用控制按钮进行操作
-4. 在"添加图片"区域添加新照片
-5. 点击"刷新图片"获取更多照片
+### 瀑布流配置
+```json
+{
+  "images": [
+    {
+      "url": "图片URL",
+      "category": "分类名称",
+      "source": "图片来源"
+    }
+  ],
+  "settings": {
+    "interval": 3000,
+    "autoFetch": true,
+    "fetchInterval": 60
+  }
+}
+```
 
-详细说明请查看：[photo-wall/README.md](./photo-wall/README.md)
+### 3D星海配置
+```json
+{
+  "categories": ["广告/代言", "写真/大片", "红毯"],
+  "defaultCategory": "全部"
+}
+```
 
-### 添加AI图片
+## 🌐 部署说明
 
-1. 将图片按风格分类放入对应目录
-2. 提交到 GitHub：
-   ```bash
-   git add images/
-   git commit -m "添加新图片"
-   git push origin main
-   ```
+### 自动部署
+项目使用 GitHub Actions 自动部署到 GitHub Pages：
+- 推送代码到 master 分支
+- 自动触发部署流程
+- 约 18s 完成部署
+- 自动更新网站
 
-### 查看图片
+### 手动部署
+```bash
+# 推送代码
+git add .
+git commit -m "更新内容"
+git push origin master
 
-1. 访问 GitHub 仓库
-2. 浏览对应明星目录
-3. 点击图片查看大图
+# 等待 GitHub Actions 完成部署
+# 访问 https://qianjin1111.github.io/beauty-gallery-hub/
+```
 
-## 📊 项目统计
+## 📖 使用文档
 
-### AI图片
-- 总数量：100张
-- 写实风格：25张
-- 二次元风格：25张
-- 艺术风格：25张
-- 其他风格：25张
+- **快速指南**: [USER_GUIDE.md](./USER_GUIDE.md)
+- **部署文档**: [NAVIGATION_DEPLOYMENT.md](./NAVIGATION_DEPLOYMENT.md)
+- **功能总结**: [DEPLOYMENT_COMPLETE.md](./DEPLOYMENT_COMPLETE.md)
+- **大图预览**: [photo-wall/MODAL_FEATURE.md](./photo-wall/MODAL_FEATURE.md)
 
-### 白鹿照片
-- 分类数：9个
-- 默认照片：8张
-- 支持动态添加
+## 🤝 贡献指南
 
-## 📝 注意事项
+欢迎提交 Issue 和 Pull Request！
 
-- 本仓库为公开仓库
-- 图片仅用于个人欣赏，不得用于商业用途
-- 请遵守AI生成内容的使用规范
-- 尊重明星的肖像权和版权
-
-## 🤝 技术栈
-
-### 白鹿照片墙
-- HTML5 + CSS3 + JavaScript (ES6+)
-- LocalStorage API
-- GitHub Pages
-
-### AI图片库
-- AI图像生成技术
-- Git版本控制
-- GitHub托管
-
-## 🔗 链接
-
-- **GitHub 仓库**：https://github.com/qianjin1111/beauty-gallery-hub
-- **维护者**：qianjin1111
+### 开发流程
+1. Fork 本仓库
+2. 创建特性分支 (`git checkout -b feature/AmazingFeature`)
+3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
+4. 推送到分支 (`git push origin feature/AmazingFeature`)
+5. 开启 Pull Request
 
 ## 📄 许可证
 
-MIT License
+本项目采用 MIT 许可证。
 
-## 👏 致谢
+## 👥 作者
 
-- 感谢AI技术提供图片生成能力
-- 感谢所有贡献者的支持
+- 项目维护者: qianjin1111
+- GitHub: https://github.com/qianjin1111/beauty-gallery-hub
+
+## 🙏 致谢
+
+- 白鹿照片来源
+- Three.js 团队
+- GitHub Pages
+
+## 📞 联系方式
+
+- GitHub Issues: https://github.com/qianjin1111/beauty-gallery-hub/issues
 
 ---
 
-**🌸 Beauty Gallery Hub - 美女图片中心**
-
-*Made with ❤️ by OpenClaw AI助手*
-
-**📅 创建日期**：2026-04-15
-**🗓️ 更新日期**：2026-04-15
-**👤 维护者**：qianjin1111
-**🔒 可见性**：公开（Public）
+**版本**: v2.2
+**更新时间**: 2026-04-16
+**状态**: ✅ 正常运行
