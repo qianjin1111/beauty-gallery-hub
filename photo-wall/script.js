@@ -4,6 +4,7 @@ class PhotoWall {
     constructor() {
         this.images = [];
         this.currentIndex = 0;
+        this.modalIndex = 0; // 模态框中显示的图片索引
         this.isPlaying = true;
         this.interval = 3000;
         this.timer = null;
@@ -245,6 +246,32 @@ class PhotoWall {
         document.getElementById('clearAllBtn').addEventListener('click', () => this.clearAll());
         document.getElementById('saveSettings').addEventListener('click', () => this.saveSettings());
 
+        // 模态框事件绑定
+        document.getElementById('modalClose').addEventListener('click', () => this.closeModal());
+        document.getElementById('modalPrev').addEventListener('click', () => this.modalPrev());
+        document.getElementById('modalNext').addEventListener('click', () => this.modalNext());
+
+        // 点击模态框背景关闭
+        document.getElementById('imageModal').addEventListener('click', (e) => {
+            if (e.target.id === 'imageModal') {
+                this.closeModal();
+            }
+        });
+
+        // 键盘事件支持
+        document.addEventListener('keydown', (e) => {
+            const modal = document.getElementById('imageModal');
+            if (modal.classList.contains('show')) {
+                if (e.key === 'Escape') {
+                    this.closeModal();
+                } else if (e.key === 'ArrowLeft') {
+                    this.modalPrev();
+                } else if (e.key === 'ArrowRight') {
+                    this.modalNext();
+                }
+            }
+        });
+
         // 添加清除存储的按钮事件
         const clearStorageBtn = document.getElementById('clearStorage');
         if (clearStorageBtn) {
@@ -300,6 +327,11 @@ class PhotoWall {
                 this.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="800" height="600"%3E%3Crect fill="%23f0f0f0" width="800" height="600"/%3E%3Ctext fill="%23dc3545" font-family="Arial" font-size="24" x="50%25" y="50%25" text-anchor="middle"%3E图片加载失败%3C/text%3E%3Ctext fill="%23666" font-family="Arial" font-size="16" x="50%25" y="60%25" text-anchor="middle"%3E请刷新页面重试%3C/text%3E%3C/svg%3E';
                 this.style.opacity = '1';
             };
+
+            // 添加点击打开模态框功能
+            currentPhoto.style.cursor = 'pointer';
+            currentPhoto.title = '点击查看大图';
+            currentPhoto.onclick = () => this.openModal(this.currentIndex);
         } else {
             currentPhoto.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="800" height="600"%3E%3Crect fill="%23f0f0f0" width="800" height="600"/%3E%3Ctext fill="%23666" font-family="Arial" font-size="24" x="50%25" y="50%25" text-anchor="middle"%3E暂无图片%3C/text%3E%3C/svg%3E';
             currentPhoto.style.opacity = '1';
@@ -375,9 +407,8 @@ class PhotoWall {
 
             imageItem.addEventListener('click', (e) => {
                 if (e.target !== checkbox) {
-                    this.currentIndex = index;
-                    this.updateDisplay();
-                    this.updateThumbnails();
+                    // 打开大图预览模态框
+                    this.openModal(index);
                 }
             });
 
@@ -660,6 +691,58 @@ class PhotoWall {
         setTimeout(() => {
             toast.className = `toast ${type}`;
         }, 3000);
+    }
+
+    // 打开模态框
+    openModal(index) {
+        if (this.images.length === 0) return;
+
+        this.modalIndex = index;
+        const modal = document.getElementById('imageModal');
+        const modalImage = document.getElementById('modalImage');
+        const modalIndexDisplay = document.getElementById('modalIndex');
+        const modalCategory = document.getElementById('modalCategory');
+
+        modalImage.src = this.images[index].url;
+        modalIndexDisplay.textContent = `${index + 1} / ${this.images.length}`;
+        modalCategory.textContent = this.images[index].category || '未分类';
+
+        modal.classList.add('show');
+        document.body.style.overflow = 'hidden'; // 防止背景滚动
+    }
+
+    // 关闭模态框
+    closeModal() {
+        const modal = document.getElementById('imageModal');
+        modal.classList.remove('show');
+        document.body.style.overflow = ''; // 恢复滚动
+    }
+
+    // 模态框中显示上一张
+    modalPrev() {
+        if (this.images.length === 0) return;
+
+        this.modalIndex = (this.modalIndex - 1 + this.images.length) % this.images.length;
+        this.updateModalContent();
+    }
+
+    // 模态框中显示下一张
+    modalNext() {
+        if (this.images.length === 0) return;
+
+        this.modalIndex = (this.modalIndex + 1) % this.images.length;
+        this.updateModalContent();
+    }
+
+    // 更新模态框内容
+    updateModalContent() {
+        const modalImage = document.getElementById('modalImage');
+        const modalIndexDisplay = document.getElementById('modalIndex');
+        const modalCategory = document.getElementById('modalCategory');
+
+        modalImage.src = this.images[this.modalIndex].url;
+        modalIndexDisplay.textContent = `${this.modalIndex + 1} / ${this.images.length}`;
+        modalCategory.textContent = this.images[this.modalIndex].category || '未分类';
     }
 }
 

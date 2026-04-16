@@ -108,6 +108,20 @@
     <!-- 提示框 -->
     <div id="toast" class="toast"></div>
 
+    <!-- 大图预览模态框 -->
+    <div id="imageModal" class="image-modal">
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">&times;</button>
+            <button class="modal-nav modal-prev" id="modalPrev">⬅️</button>
+            <button class="modal-nav modal-next" id="modalNext">➡️</button>
+            <img id="modalImage" src="" alt="大图预览" class="modal-image">
+            <div class="modal-info">
+                <span id="modalIndex">0 / 0</span>
+                <span id="modalCategory">分类</span>
+            </div>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>
